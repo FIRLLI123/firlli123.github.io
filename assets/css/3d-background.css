@@ -1,0 +1,88 @@
+/* ═══════════════════════════════════════════════════════════════════════════
+   3D Background Canvas — SnapFolio Portfolio
+   Fixed behind all page content, scroll-driven via JS
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+:root {
+  --bg-depth-opacity: 1;
+  --bg-depth-scale: 1;
+  --bg-depth-blur: 0px;
+  --bg-depth-shift-y: 0px;
+  --bg-overlay-opacity: 0.62;
+}
+
+#bg3d-canvas {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: -1;           /* sits behind everything */
+  pointer-events: none;  /* never blocks clicks */
+  display: block;
+  will-change: transform;
+  opacity: var(--bg-depth-opacity);
+  transform: translate3d(0, var(--bg-depth-shift-y), 0) scale(var(--bg-depth-scale));
+  filter: blur(var(--bg-depth-blur)) saturate(1.08);
+  transform-origin: center center;
+  transition:
+    opacity 0.35s ease-out,
+    transform 0.35s ease-out,
+    filter 0.35s ease-out;
+  background: radial-gradient(ellipse at 50% 50%,
+    #0d0b2a 0%,
+    #060412 60%,
+    #000008 100%);
+}
+
+/* Ensures all sections sit above the canvas while keeping their
+   existing backgrounds */
+.main section {
+  position: relative;
+  z-index: 1;
+}
+
+/* Hero — fully transparent so galaxy is 100% visible */
+#hero {
+  background: transparent !important;
+}
+
+/* Other sections — semi-transparent overlay keeps text readable
+   while letting the galaxy glow through */
+.main section:not(#hero) {
+  background: transparent !important;
+}
+
+.main section:not(#hero)::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background: linear-gradient(
+    to bottom,
+    rgba(8, 6, 20, 0.55) 0%,
+    rgba(8, 6, 20, 0.70) 50%,
+    rgba(8, 6, 20, 0.60) 100%
+  );
+  opacity: var(--bg-overlay-opacity);
+  transition: opacity 0.35s ease-out;
+}
+
+/* Ensure all section content sits above the overlay */
+.main section:not(#hero) > * {
+  position: relative;
+  z-index: 1;
+}
+
+/* Fix header z-index to always sit on top */
+#header {
+  z-index: 999;
+}
+
+/* Footer also needs relative positioning above canvas */
+#footer {
+  position: relative;
+  z-index: 2;
+  background: rgba(5, 4, 18, 0.85) !important;
+}

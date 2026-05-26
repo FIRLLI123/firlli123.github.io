@@ -1,0 +1,966 @@
+
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FIRLLI - Portfolio</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --neon:#00ff88;
+  --neon2:#00cc66;
+  --neon3:#00ffaa;
+  --glass:rgba(255,255,255,0.12);
+  --glass-border:rgba(255,255,255,0.25);
+  --glass-hover:rgba(255,255,255,0.2);
+  --bg1:#f0fff4;
+  --bg2:#e8fdf0;
+  --text-dark:#0a1628;
+  --text-mid:#1e3a2f;
+  --text-light:#2d5a3d;
+}
+html{scroll-behavior:smooth}
+body{
+  font-family:'Inter',sans-serif;
+  background:linear-gradient(135deg,#e8fdf0 0%,#f0fff8 30%,#e0f7fa 60%,#f5fff8 100%);
+  min-height:100vh;
+  overflow-x:hidden;
+  color:var(--text-dark);
+}
+
+/* ANIMATED BG BLOBS */
+.bg-blobs{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden}
+.blob{position:absolute;border-radius:50%;filter:blur(80px);animation:blobFloat 8s ease-in-out infinite alternate}
+.blob1{width:600px;height:600px;background:radial-gradient(circle,rgba(0,255,136,0.15),transparent 70%);top:-100px;right:-100px;animation-duration:9s}
+.blob2{width:500px;height:500px;background:radial-gradient(circle,rgba(0,200,100,0.12),transparent 70%);bottom:-100px;left:-100px;animation-duration:11s;animation-delay:-3s}
+.blob3{width:400px;height:400px;background:radial-gradient(circle,rgba(0,255,170,0.1),transparent 70%);top:40%;left:30%;animation-duration:7s;animation-delay:-5s}
+@keyframes blobFloat{0%{transform:translate(0,0) scale(1)}100%{transform:translate(40px,30px) scale(1.1)}}
+
+/* GRID PATTERN */
+.grid-pattern{
+  position:fixed;inset:0;z-index:0;pointer-events:none;
+  background-image:linear-gradient(rgba(0,255,136,0.06) 1px,transparent 1px),linear-gradient(90deg,rgba(0,255,136,0.06) 1px,transparent 1px);
+  background-size:50px 50px;
+}
+
+/* PARTICLES */
+.particles{position:fixed;inset:0;z-index:0;pointer-events:none}
+.particle{
+  position:absolute;width:3px;height:3px;background:var(--neon);
+  border-radius:50%;animation:particleRise linear infinite;opacity:0;
+}
+@keyframes particleRise{
+  0%{transform:translateY(100vh) translateX(0);opacity:0}
+  10%{opacity:0.6}
+  90%{opacity:0.3}
+  100%{transform:translateY(-100px) translateX(var(--drift));opacity:0}
+}
+
+/* NAV */
+nav{
+  position:fixed;top:20px;left:50%;transform:translateX(-50%);z-index:1000;
+  background:rgba(255,255,255,0.18);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);
+  border:1px solid rgba(255,255,255,0.4);border-radius:50px;
+  padding:12px 28px;display:flex;gap:32px;align-items:center;
+  box-shadow:0 8px 32px rgba(0,255,136,0.1);
+  animation:navSlide 0.8s ease-out;
+}
+@keyframes navSlide{from{top:-80px;opacity:0}to{top:20px;opacity:1}}
+nav a{
+  text-decoration:none;color:var(--text-mid);font-size:13px;font-weight:500;
+  transition:all 0.3s ease;position:relative;letter-spacing:0.5px;
+}
+nav a:hover{color:var(--neon2)}
+nav a::after{
+  content:'';position:absolute;bottom:-2px;left:0;width:0;height:2px;
+  background:var(--neon);border-radius:2px;transition:width 0.3s ease;
+}
+nav a:hover::after{width:100%}
+.nav-dot{
+  width:8px;height:8px;background:var(--neon);border-radius:50%;
+  animation:pulse 2s ease-in-out infinite;
+}
+@keyframes pulse{0%,100%{box-shadow:0 0 0 0 rgba(0,255,136,0.4)}50%{box-shadow:0 0 0 8px rgba(0,255,136,0)}}
+
+/* SECTION BASE */
+section{position:relative;z-index:1;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:120px 40px 60px}
+
+/* HERO */
+#hero{padding-top:100px;overflow:hidden}
+.hero-inner{max-width:1200px;width:100%;display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:center}
+.hero-text{animation:heroTextIn 1s ease-out 0.3s both}
+@keyframes heroTextIn{from{opacity:0;transform:translateX(-60px)}to{opacity:1;transform:translateX(0)}}
+.hero-badge{
+  display:inline-flex;align-items:center;gap:8px;
+  background:rgba(0,255,136,0.15);border:1px solid rgba(0,255,136,0.4);
+  border-radius:50px;padding:6px 16px;font-size:12px;font-weight:500;
+  color:var(--neon2);margin-bottom:20px;letter-spacing:1px;text-transform:uppercase;
+}
+.hero-badge span{width:6px;height:6px;background:var(--neon);border-radius:50%;animation:pulse 1.5s infinite}
+h1.hero-name{
+  font-size:clamp(52px,8vw,88px);font-weight:900;line-height:1;
+  color:var(--text-dark);margin-bottom:8px;letter-spacing:-3px;
+}
+h1.hero-name span{
+  background:linear-gradient(135deg,#00cc66,#00ff88,#00ffaa);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+}
+.hero-title{font-size:16px;font-weight:400;color:var(--text-light);margin-bottom:20px;letter-spacing:2px;text-transform:uppercase}
+.hero-desc{
+  font-size:15px;line-height:1.8;color:#3d6b50;max-width:480px;margin-bottom:32px;
+}
+.typed-line{
+  font-family:'JetBrains Mono',monospace;font-size:15px;color:var(--neon2);
+  margin-bottom:32px;display:flex;align-items:center;gap:8px;
+}
+.typed-prefix{color:var(--text-light);font-size:13px}
+.typed-text{position:relative}
+.typed-cursor{
+  display:inline-block;width:2px;height:1em;background:var(--neon);
+  vertical-align:middle;margin-left:2px;animation:blink 1s infinite;
+}
+@keyframes blink{0%,50%{opacity:1}51%,100%{opacity:0}}
+.hero-btns{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:40px}
+.btn-primary{
+  background:linear-gradient(135deg,var(--neon2),var(--neon));color:#0a1628;
+  padding:14px 28px;border-radius:50px;font-weight:700;font-size:14px;
+  text-decoration:none;border:none;cursor:pointer;transition:all 0.3s ease;
+  letter-spacing:0.5px;box-shadow:0 4px 20px rgba(0,255,136,0.3);
+}
+.btn-primary:hover{transform:translateY(-2px);box-shadow:0 8px 30px rgba(0,255,136,0.4)}
+.btn-glass{
+  background:rgba(255,255,255,0.2);backdrop-filter:blur(10px);
+  border:1px solid rgba(0,255,136,0.4);color:var(--text-mid);
+  padding:14px 28px;border-radius:50px;font-weight:500;font-size:14px;
+  text-decoration:none;cursor:pointer;transition:all 0.3s ease;
+}
+.btn-glass:hover{background:rgba(0,255,136,0.15);transform:translateY(-2px)}
+.hero-stats{display:flex;gap:32px}
+.stat{text-align:center}
+.stat-num{font-size:28px;font-weight:900;color:var(--neon2);line-height:1}
+.stat-label{font-size:11px;color:var(--text-light);margin-top:2px;letter-spacing:1px;text-transform:uppercase}
+
+/* 3D CHARACTER AREA */
+.hero-visual{
+  display:flex;justify-content:center;align-items:center;
+  animation:heroVisualIn 1s ease-out 0.6s both;
+}
+@keyframes heroVisualIn{from{opacity:0;transform:translateX(60px)}to{opacity:1;transform:translateX(0)}}
+.character-scene{
+  position:relative;width:420px;height:500px;
+}
+.character-canvas-wrap{
+  width:100%;height:100%;
+  position:relative;
+}
+.scene-glow{
+  position:absolute;bottom:0;left:50%;transform:translateX(-50%);
+  width:260px;height:80px;
+  background:radial-gradient(ellipse,rgba(0,255,136,0.3),transparent 70%);
+  border-radius:50%;animation:glowPulse 3s ease-in-out infinite alternate;
+}
+@keyframes glowPulse{0%{opacity:0.5;transform:translateX(-50%) scaleX(0.8)}100%{opacity:1;transform:translateX(-50%) scaleX(1.1)}}
+.floating-icons{position:absolute;inset:0;pointer-events:none}
+.ficon{
+  position:absolute;background:rgba(255,255,255,0.2);backdrop-filter:blur(12px);
+  border:1px solid rgba(255,255,255,0.4);border-radius:12px;padding:8px 12px;
+  font-size:11px;font-weight:600;color:var(--text-mid);
+  animation:floatIcon 4s ease-in-out infinite alternate;white-space:nowrap;
+  box-shadow:0 4px 16px rgba(0,255,136,0.1);
+}
+.ficon:nth-child(1){top:40px;left:-20px;animation-delay:0s}
+.ficon:nth-child(2){top:140px;right:-30px;animation-delay:-1.5s}
+.ficon:nth-child(3){bottom:160px;left:-30px;animation-delay:-0.8s}
+.ficon:nth-child(4){bottom:80px;right:-20px;animation-delay:-2.2s}
+@keyframes floatIcon{0%{transform:translateY(0) rotate(-2deg)}100%{transform:translateY(-12px) rotate(2deg)}}
+
+/* GLASS CARD */
+.glass-card{
+  background:rgba(255,255,255,0.18);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);
+  border:1px solid rgba(255,255,255,0.4);border-radius:20px;
+  box-shadow:0 8px 32px rgba(0,255,136,0.08),inset 0 1px 0 rgba(255,255,255,0.5);
+  transition:all 0.4s ease;
+}
+.glass-card:hover{
+  background:rgba(255,255,255,0.25);transform:translateY(-4px);
+  box-shadow:0 16px 48px rgba(0,255,136,0.15),inset 0 1px 0 rgba(255,255,255,0.6);
+}
+
+/* SECTION TITLE */
+.section-tag{
+  display:inline-block;background:rgba(0,255,136,0.15);border:1px solid rgba(0,255,136,0.4);
+  border-radius:50px;padding:4px 16px;font-size:11px;font-weight:600;
+  color:var(--neon2);letter-spacing:2px;text-transform:uppercase;margin-bottom:12px;
+}
+.section-title{font-size:clamp(32px,5vw,52px);font-weight:800;color:var(--text-dark);margin-bottom:8px;letter-spacing:-1.5px}
+.section-sub{font-size:15px;color:#3d6b50;margin-bottom:48px}
+
+/* ABOUT */
+#about{background:transparent}
+.about-grid{max-width:1100px;width:100%;display:grid;grid-template-columns:1fr 1.6fr;gap:48px;align-items:start}
+.profile-glass{padding:32px;text-align:center}
+.avatar-ring{
+  width:140px;height:140px;border-radius:50%;margin:0 auto 20px;
+  background:linear-gradient(135deg,var(--neon),var(--neon2));padding:3px;
+  animation:ringRotate 8s linear infinite;
+}
+@keyframes ringRotate{from{filter:hue-rotate(0deg)}to{filter:hue-rotate(30deg)}}
+.avatar-inner{
+  width:100%;height:100%;border-radius:50%;
+  background:linear-gradient(135deg,#e0f7ea,#c8f5e0);
+  display:flex;align-items:center;justify-content:center;
+  font-size:52px;font-weight:900;color:var(--neon2);
+  overflow:hidden;
+}
+.profile-name{font-size:22px;font-weight:800;color:var(--text-dark);margin-bottom:4px}
+.profile-role{font-size:13px;color:var(--neon2);font-weight:500;letter-spacing:1px;margin-bottom:20px}
+.contact-chip{
+  display:flex;align-items:center;gap:8px;padding:8px 12px;
+  background:rgba(0,255,136,0.08);border:1px solid rgba(0,255,136,0.2);
+  border-radius:10px;margin-bottom:8px;font-size:12px;color:var(--text-mid);
+}
+.chip-icon{width:16px;height:16px;color:var(--neon2)}
+.about-content{}
+.about-desc{font-size:15px;line-height:1.8;color:#3d6b50;margin-bottom:32px}
+.stats-row{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:32px}
+.stat-card{padding:16px 12px;text-align:center;border-radius:14px}
+.stat-card .num{font-size:24px;font-weight:900;color:var(--neon2);line-height:1}
+.stat-card .lbl{font-size:10px;color:var(--text-light);margin-top:4px;letter-spacing:0.5px;text-transform:uppercase}
+
+/* SKILLS */
+#skills{background:transparent;min-height:auto;padding:80px 40px}
+.skills-wrap{max-width:1100px;width:100%}
+.skills-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:20px;margin-top:40px}
+.skill-group{padding:24px;border-radius:18px}
+.skill-group-title{font-size:13px;font-weight:700;color:var(--neon2);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:20px}
+.skill-item-row{margin-bottom:16px}
+.skill-name-row{display:flex;justify-content:space-between;margin-bottom:6px}
+.skill-name{font-size:13px;font-weight:500;color:var(--text-dark)}
+.skill-pct{font-size:12px;color:var(--neon2);font-weight:600}
+.skill-bar{height:5px;background:rgba(0,255,136,0.15);border-radius:10px;overflow:hidden}
+.skill-fill{
+  height:100%;background:linear-gradient(90deg,var(--neon2),var(--neon));
+  border-radius:10px;width:0;transition:width 1.2s cubic-bezier(0.4,0,0.2,1);
+}
+
+/* PORTFOLIO */
+#portfolio{background:transparent;min-height:auto;padding:80px 40px}
+.portfolio-wrap{max-width:1100px;width:100%}
+.portfolio-filters{display:flex;gap:10px;margin-bottom:32px;flex-wrap:wrap}
+.filter-btn{
+  padding:8px 20px;border-radius:50px;font-size:13px;font-weight:500;
+  cursor:pointer;border:1px solid rgba(0,255,136,0.3);background:rgba(255,255,255,0.15);
+  color:var(--text-mid);transition:all 0.3s ease;backdrop-filter:blur(8px);
+}
+.filter-btn.active,.filter-btn:hover{
+  background:linear-gradient(135deg,var(--neon2),var(--neon));color:#0a1628;
+  border-color:transparent;box-shadow:0 4px 15px rgba(0,255,136,0.3);
+}
+.portfolio-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:20px}
+.portfolio-card{border-radius:18px;overflow:hidden;padding:0}
+.port-img{width:100%;height:180px;background:linear-gradient(135deg,#c8f5e0,#a8edca);display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden}
+.port-img-label{font-size:32px;font-weight:900;color:rgba(0,150,80,0.3);letter-spacing:-1px}
+.port-overlay{
+  position:absolute;inset:0;background:rgba(0,255,136,0.15);
+  display:flex;align-items:center;justify-content:center;
+  opacity:0;transition:opacity 0.3s ease;
+}
+.portfolio-card:hover .port-overlay{opacity:1}
+.port-info{padding:20px}
+.port-cat{font-size:10px;color:var(--neon2);letter-spacing:2px;text-transform:uppercase;font-weight:600;margin-bottom:4px}
+.port-title{font-size:16px;font-weight:700;color:var(--text-dark);margin-bottom:8px}
+.port-tech{display:flex;gap:6px;flex-wrap:wrap}
+.tech-tag{
+  padding:3px 10px;background:rgba(0,255,136,0.1);border:1px solid rgba(0,255,136,0.3);
+  border-radius:50px;font-size:10px;color:var(--neon2);font-weight:500;
+}
+
+/* EXPERIENCE */
+#experience{background:transparent;min-height:auto;padding:80px 40px}
+.exp-wrap{max-width:900px;width:100%}
+.timeline{position:relative;margin-top:40px}
+.timeline::before{content:'';position:absolute;left:24px;top:0;bottom:0;width:2px;background:linear-gradient(180deg,var(--neon),transparent)}
+.timeline-item{display:flex;gap:32px;margin-bottom:32px;animation:fadeInUp 0.6s ease-out both}
+@keyframes fadeInUp{from{opacity:0;transform:translateY(30px)}to{opacity:1;transform:translateY(0)}}
+.timeline-dot{
+  flex-shrink:0;width:50px;height:50px;border-radius:50%;
+  background:linear-gradient(135deg,var(--neon2),var(--neon));
+  display:flex;align-items:center;justify-content:center;
+  font-size:18px;box-shadow:0 0 20px rgba(0,255,136,0.4);
+  position:relative;z-index:1;
+}
+.timeline-content{flex:1;padding:24px;border-radius:16px}
+.exp-role{font-size:17px;font-weight:700;color:var(--text-dark);margin-bottom:2px}
+.exp-company{font-size:13px;color:var(--neon2);font-weight:500;margin-bottom:4px}
+.exp-period{font-size:11px;color:var(--text-light);letter-spacing:1px;margin-bottom:12px;text-transform:uppercase}
+.exp-list{list-style:none}
+.exp-list li{font-size:13px;color:#3d6b50;margin-bottom:6px;padding-left:14px;position:relative;line-height:1.6}
+.exp-list li::before{content:'▹';position:absolute;left:0;color:var(--neon);font-size:10px;top:2px}
+
+/* SERVICES */
+#services{background:transparent;min-height:auto;padding:80px 40px}
+.services-wrap{max-width:1100px;width:100%}
+.services-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:20px;margin-top:40px}
+.service-card{padding:28px;border-radius:18px;position:relative;overflow:hidden}
+.service-card::before{
+  content:'';position:absolute;top:-50%;right:-50%;width:120px;height:120px;
+  background:radial-gradient(circle,rgba(0,255,136,0.1),transparent 70%);
+  border-radius:50%;
+}
+.svc-icon{
+  width:48px;height:48px;background:rgba(0,255,136,0.15);border:1px solid rgba(0,255,136,0.3);
+  border-radius:14px;display:flex;align-items:center;justify-content:center;
+  font-size:22px;margin-bottom:16px;
+}
+.svc-title{font-size:16px;font-weight:700;color:var(--text-dark);margin-bottom:8px}
+.svc-desc{font-size:13px;color:#3d6b50;line-height:1.7}
+
+/* CONTACT */
+#contact{background:transparent;min-height:auto;padding:80px 40px}
+.contact-wrap{max-width:900px;width:100%}
+.contact-grid{display:grid;grid-template-columns:1fr 1.4fr;gap:32px;margin-top:40px}
+.contact-info-card{padding:32px;border-radius:18px}
+.contact-item{display:flex;gap:14px;align-items:flex-start;margin-bottom:20px}
+.ci-icon{
+  width:40px;height:40px;flex-shrink:0;background:rgba(0,255,136,0.12);
+  border:1px solid rgba(0,255,136,0.3);border-radius:10px;
+  display:flex;align-items:center;justify-content:center;font-size:16px;
+}
+.ci-label{font-size:10px;color:var(--neon2);letter-spacing:1.5px;text-transform:uppercase;font-weight:600;margin-bottom:2px}
+.ci-val{font-size:14px;color:var(--text-dark);font-weight:500}
+.social-row{display:flex;gap:10px;margin-top:24px}
+.social-btn{
+  width:42px;height:42px;border-radius:12px;
+  background:rgba(255,255,255,0.2);border:1px solid rgba(0,255,136,0.3);
+  display:flex;align-items:center;justify-content:center;font-size:16px;
+  color:var(--text-mid);text-decoration:none;transition:all 0.3s ease;cursor:pointer;
+}
+.social-btn:hover{background:rgba(0,255,136,0.2);color:var(--neon2);transform:translateY(-3px)}
+.cta-glass{padding:40px;border-radius:18px;text-align:center}
+.cta-title{font-size:22px;font-weight:800;color:var(--text-dark);margin-bottom:8px}
+.cta-sub{font-size:14px;color:#3d6b50;margin-bottom:28px;line-height:1.6}
+
+/* FOOTER */
+footer{
+  position:relative;z-index:1;text-align:center;padding:32px;
+  border-top:1px solid rgba(0,255,136,0.15);
+  font-size:13px;color:var(--text-light);
+}
+footer span{color:var(--neon2);font-weight:600}
+
+/* SCROLL ANIMATIONS */
+.reveal{opacity:0;transform:translateY(40px);transition:all 0.8s cubic-bezier(0.4,0,0.2,1)}
+.reveal.visible{opacity:1;transform:translateY(0)}
+.reveal-left{opacity:0;transform:translateX(-40px);transition:all 0.8s cubic-bezier(0.4,0,0.2,1)}
+.reveal-left.visible{opacity:1;transform:translateX(0)}
+.reveal-right{opacity:0;transform:translateX(40px);transition:all 0.8s cubic-bezier(0.4,0,0.2,1)}
+.reveal-right.visible{opacity:1;transform:translateX(0)}
+
+/* SCROLLBAR */
+::-webkit-scrollbar{width:4px}
+::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:var(--neon2);border-radius:4px}
+</style>
+</head>
+<body>
+
+<div class="bg-blobs">
+  <div class="blob blob1"></div>
+  <div class="blob blob2"></div>
+  <div class="blob blob3"></div>
+</div>
+<div class="grid-pattern"></div>
+<div class="particles" id="particles"></div>
+
+<nav>
+  <div class="nav-dot"></div>
+  <a href="#hero">Home</a>
+  <a href="#about">About</a>
+  <a href="#skills">Skills</a>
+  <a href="#portfolio">Portfolio</a>
+  <a href="#experience">Experience</a>
+  <a href="#services">Services</a>
+  <a href="#contact">Contact</a>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-inner">
+    <div class="hero-text">
+      <div class="hero-badge"><span></span>Available for Work</div>
+      <h1 class="hero-name">FIR<span>LLI</span></h1>
+      <p class="hero-title">IT Developer · Full Stack Developer</p>
+      <p class="hero-desc">IT Developer dengan 7+ tahun pengalaman membangun aplikasi Web, Desktop, dan Mobile menggunakan Laravel, PHP, MySQL, Java, dan Android Studio.</p>
+      <div class="typed-line">
+        <span class="typed-prefix">Saya seorang</span>
+        <span class="typed-text" id="typed-text">Web Developer</span><span class="typed-cursor"></span>
+      </div>
+      <div class="hero-btns">
+        <a href="#portfolio" class="btn-primary">Lihat Karya Saya</a>
+        <a href="#contact" class="btn-glass">Kontak Saya</a>
+      </div>
+      <div class="hero-stats">
+        <div class="stat"><div class="stat-num">7+</div><div class="stat-label">Tahun Exp</div></div>
+        <div class="stat"><div class="stat-num">10+</div><div class="stat-label">Projects</div></div>
+        <div class="stat"><div class="stat-num">200+</div><div class="stat-label">Users</div></div>
+      </div>
+    </div>
+    <div class="hero-visual">
+      <div class="character-scene">
+        <div class="floating-icons">
+          <div class="ficon">⚡ Laravel</div>
+          <div class="ficon">📱 Flutter</div>
+          <div class="ficon">🔧 MySQL</div>
+          <div class="ficon">🚀 Vue.js</div>
+        </div>
+        <canvas id="charCanvas" width="420" height="460" style="position:relative;z-index:2"></canvas>
+        <div class="scene-glow"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section id="about">
+  <div class="about-grid">
+    <div class="glass-card profile-glass reveal-left">
+      <div class="avatar-ring">
+        <div class="avatar-inner">👨‍💻</div>
+      </div>
+      <div class="profile-name">FIRLLI</div>
+      <div class="profile-role">IT Developer · Full Stack</div>
+      <div class="contact-chip"><span class="chip-icon">📧</span> firlli.dev@gmail.com</div>
+      <div class="contact-chip"><span class="chip-icon">📱</span> 0822-4949-5858</div>
+      <div class="contact-chip"><span class="chip-icon">📍</span> Cileungsi, Bogor</div>
+      <div class="contact-chip"><span class="chip-icon">🎓</span> S1 Teknik Informatika</div>
+    </div>
+    <div class="about-content reveal-right">
+      <div class="section-tag">Tentang Saya</div>
+      <h2 class="section-title" style="font-size:32px">Developer Berpengalaman</h2>
+      <p class="about-desc">IT Developer dengan pengalaman lebih dari 7 tahun membangun aplikasi Web, Mobile, dan Desktop. Terbiasa dengan Laravel, PHP, MySQL, Java, Kotlin, Android Studio, dan Git. Berpengalaman mengembangkan sistem penjualan, absensi, survey, dan integrasi API yang terbukti meningkatkan efisiensi bisnis.</p>
+      <p class="about-desc" style="margin-top:-16px">Siap membantu digitalisasi proses bisnis dengan aplikasi yang handal dan efisien.</p>
+      <div class="stats-row">
+        <div class="glass-card stat-card"><div class="num">10+</div><div class="lbl">Projects</div></div>
+        <div class="glass-card stat-card"><div class="num">7+</div><div class="lbl">Tahun Exp</div></div>
+        <div class="glass-card stat-card"><div class="num">10+</div><div class="lbl">Sistem</div></div>
+        <div class="glass-card stat-card"><div class="num">200+</div><div class="lbl">Users</div></div>
+      </div>
+      <div style="display:flex;gap:12px">
+        <a href="https://docs.google.com/gview?url=https://firlli123.github.io/assets/Firlli_IT_Developer_CV.pdf&embedded=true" target="_blank" class="btn-primary" style="font-size:13px;padding:12px 22px">👁 Preview CV</a>
+        <a href="https://wa.me/6282249495858" target="_blank" class="btn-glass" style="font-size:13px;padding:12px 22px">💬 Hubungi Saya</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SKILLS -->
+<section id="skills">
+  <div class="skills-wrap">
+    <div class="reveal">
+      <div class="section-tag">Keahlian</div>
+      <h2 class="section-title">Tech Stack</h2>
+      <p class="section-sub">Keahlian utama dalam pengembangan aplikasi Web, Mobile, dan integrasi API.</p>
+    </div>
+    <div class="skills-grid">
+      <div class="glass-card skill-group reveal">
+        <div class="skill-group-title">⚡ Front-end</div>
+        <div class="skill-item-row"><div class="skill-name-row"><span class="skill-name">Vue.js</span><span class="skill-pct">90%</span></div><div class="skill-bar"><div class="skill-fill" data-width="90"></div></div></div>
+        <div class="skill-item-row"><div class="skill-name-row"><span class="skill-name">Bootstrap</span><span class="skill-pct">80%</span></div><div class="skill-bar"><div class="skill-fill" data-width="80"></div></div></div>
+        <div class="skill-item-row"><div class="skill-name-row"><span class="skill-name">Tailwind CSS</span><span class="skill-pct">70%</span></div><div class="skill-bar"><div class="skill-fill" data-width="70"></div></div></div>
+        <div class="skill-item-row"><div class="skill-name-row"><span class="skill-name">HTML/CSS/JS</span><span class="skill-pct">85%</span></div><div class="skill-bar"><div class="skill-fill" data-width="85"></div></div></div>
+      </div>
+      <div class="glass-card skill-group reveal">
+        <div class="skill-group-title">🔧 Back-end</div>
+        <div class="skill-item-row"><div class="skill-name-row"><span class="skill-name">PHP</span><span class="skill-pct">90%</span></div><div class="skill-bar"><div class="skill-fill" data-width="90"></div></div></div>
+        <div class="skill-item-row"><div class="skill-name-row"><span class="skill-name">Laravel</span><span class="skill-pct">80%</span></div><div class="skill-bar"><div class="skill-fill" data-width="80"></div></div></div>
+        <div class="skill-item-row"><div class="skill-name-row"><span class="skill-name">MySQL</span><span class="skill-pct">85%</span></div><div class="skill-bar"><div class="skill-fill" data-width="85"></div></div></div>
+        <div class="skill-item-row"><div class="skill-name-row"><span class="skill-name">PostgreSQL</span><span class="skill-pct">85%</span></div><div class="skill-bar"><div class="skill-fill" data-width="85"></div></div></div>
+      </div>
+      <div class="glass-card skill-group reveal">
+        <div class="skill-group-title">📱 Mobile</div>
+        <div class="skill-item-row"><div class="skill-name-row"><span class="skill-name">Java / Kotlin</span><span class="skill-pct">80%</span></div><div class="skill-bar"><div class="skill-fill" data-width="80"></div></div></div>
+        <div class="skill-item-row"><div class="skill-name-row"><span class="skill-name">Flutter (Dart)</span><span class="skill-pct">75%</span></div><div class="skill-bar"><div class="skill-fill" data-width="75"></div></div></div>
+        <div class="skill-item-row"><div class="skill-name-row"><span class="skill-name">Android Studio</span><span class="skill-pct">80%</span></div><div class="skill-bar"><div class="skill-fill" data-width="80"></div></div></div>
+      </div>
+      <div class="glass-card skill-group reveal">
+        <div class="skill-group-title">🔌 API & Tools</div>
+        <div class="skill-item-row"><div class="skill-name-row"><span class="skill-name">RESTful API</span><span class="skill-pct">85%</span></div><div class="skill-bar"><div class="skill-fill" data-width="85"></div></div></div>
+        <div class="skill-item-row"><div class="skill-name-row"><span class="skill-name">Xendit Gateway</span><span class="skill-pct">80%</span></div><div class="skill-bar"><div class="skill-fill" data-width="80"></div></div></div>
+        <div class="skill-item-row"><div class="skill-name-row"><span class="skill-name">Git</span><span class="skill-pct">85%</span></div><div class="skill-bar"><div class="skill-fill" data-width="85"></div></div></div>
+        <div class="skill-item-row"><div class="skill-name-row"><span class="skill-name">Postman</span><span class="skill-pct">80%</span></div><div class="skill-bar"><div class="skill-fill" data-width="80"></div></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PORTFOLIO -->
+<section id="portfolio">
+  <div class="portfolio-wrap">
+    <div class="reveal">
+      <div class="section-tag">Portofolio</div>
+      <h2 class="section-title">Proyek Saya</h2>
+      <p class="section-sub">Beberapa proyek aplikasi Web, Mobile, dan integrasi API yang pernah saya kerjakan.</p>
+    </div>
+    <div class="portfolio-filters">
+      <button class="filter-btn active" data-filter="all">Semua</button>
+      <button class="filter-btn" data-filter="web">Web</button>
+      <button class="filter-btn" data-filter="mobile">Mobile</button>
+      <button class="filter-btn" data-filter="desktop">Desktop</button>
+    </div>
+    <div class="portfolio-grid" id="port-grid">
+      <div class="glass-card portfolio-card reveal" data-cat="web">
+        <div class="port-img" style="background:linear-gradient(135deg,#c8f5e0,#9de8c0)"><div class="port-img-label">WEB</div><div class="port-overlay">🔍 View</div></div>
+        <div class="port-info"><div class="port-cat">Web · Laravel</div><div class="port-title">Web Monster (Laravel)</div><div class="port-tech"><span class="tech-tag">Laravel</span><span class="tech-tag">MySQL</span><span class="tech-tag">Bootstrap</span></div></div>
+      </div>
+      <div class="glass-card portfolio-card reveal" data-cat="mobile">
+        <div class="port-img" style="background:linear-gradient(135deg,#b8f0d8,#80e4b0)"><div class="port-img-label">APP</div><div class="port-overlay">🔍 View</div></div>
+        <div class="port-info"><div class="port-cat">Mobile · Java/Kotlin</div><div class="port-title">Aplikasi Jarvis (Android)</div><div class="port-tech"><span class="tech-tag">Java</span><span class="tech-tag">Kotlin</span><span class="tech-tag">REST API</span></div></div>
+      </div>
+      <div class="glass-card portfolio-card reveal" data-cat="desktop">
+        <div class="port-img" style="background:linear-gradient(135deg,#d0f5e4,#a0e8c0)"><div class="port-img-label">DESKTOP</div><div class="port-overlay">🔍 View</div></div>
+        <div class="port-info"><div class="port-cat">Desktop · NetBeans</div><div class="port-title">Kasir Kedai Kop</div><div class="port-tech"><span class="tech-tag">Java</span><span class="tech-tag">NetBeans</span><span class="tech-tag">MySQL</span></div></div>
+      </div>
+      <div class="glass-card portfolio-card reveal" data-cat="web">
+        <div class="port-img" style="background:linear-gradient(135deg,#b0f0d0,#70e0a8)"><div class="port-img-label">WEB</div><div class="port-overlay">🔍 View</div></div>
+        <div class="port-info"><div class="port-cat">Web · PHP Native</div><div class="port-title">Web Jarvis (PHP Native)</div><div class="port-tech"><span class="tech-tag">PHP</span><span class="tech-tag">MySQL</span><span class="tech-tag">Bootstrap</span></div></div>
+      </div>
+      <div class="glass-card portfolio-card reveal" data-cat="mobile">
+        <div class="port-img" style="background:linear-gradient(135deg,#c0f5e8,#88e8c0)"><div class="port-img-label">APP</div><div class="port-overlay">🔍 View</div></div>
+        <div class="port-info"><div class="port-cat">Mobile · Android</div><div class="port-title">Aplikasi Monster (Android)</div><div class="port-tech"><span class="tech-tag">Java</span><span class="tech-tag">Kotlin</span><span class="tech-tag">Xendit</span></div></div>
+      </div>
+      <div class="glass-card portfolio-card reveal" data-cat="mobile">
+        <div class="port-img" style="background:linear-gradient(135deg,#a8f0d0,#68dca8)"><div class="port-img-label">APP</div><div class="port-overlay">🔍 View</div></div>
+        <div class="port-info"><div class="port-cat">Mobile · Flutter</div><div class="port-title">Aplikasi Modis (Flutter)</div><div class="port-tech"><span class="tech-tag">Flutter</span><span class="tech-tag">Dart</span><span class="tech-tag">REST API</span></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- EXPERIENCE -->
+<section id="experience">
+  <div class="exp-wrap">
+    <div class="reveal">
+      <div class="section-tag">Pengalaman</div>
+      <h2 class="section-title">Karir Profesional</h2>
+      <p class="section-sub">Ringkasan pengalaman kerja dan pencapaian saya.</p>
+    </div>
+    <div class="timeline">
+      <div class="timeline-item reveal" style="animation-delay:0.1s">
+        <div class="timeline-dot">💼</div>
+        <div class="glass-card timeline-content">
+          <div class="exp-role">IT Developer</div>
+          <div class="exp-company">PT. Sarana Media Selular</div>
+          <div class="exp-period">Okt 2024 – Sekarang</div>
+          <ul class="exp-list">
+            <li>Mengembangkan aplikasi web dan mobile dengan Laravel, Vue.js, dan Bootstrap.</li>
+            <li>Membangun RESTful API untuk integrasi aplikasi Android dan web dashboard.</li>
+            <li>Mengembangkan aplikasi Android untuk 50+ pengguna internal dengan Java dan Kotlin.</li>
+            <li>Implementasi Xendit Payment Gateway untuk transaksi digital.</li>
+            <li>Mengembangkan aplikasi Flutter untuk sistem penjualan terintegrasi API.</li>
+          </ul>
+        </div>
+      </div>
+      <div class="timeline-item reveal" style="animation-delay:0.2s">
+        <div class="timeline-dot">🖥️</div>
+        <div class="glass-card timeline-content">
+          <div class="exp-role">IT Support & IT Developer</div>
+          <div class="exp-company">PT. Reka Mitrayasa Komunikatama</div>
+          <div class="exp-period">Agu 2017 – Sep 2024</div>
+          <ul class="exp-list">
+            <li>Mengelola infrastruktur IT: jaringan, hardware/software, CCTV, troubleshooting.</li>
+            <li>Mengembangkan sistem penjualan, absensi, dashboard monitoring berbasis web.</li>
+            <li>Membangun aplikasi Android Java untuk tim lapangan dengan fitur thermal printer.</li>
+            <li>Mengembangkan aplikasi desktop berbasis Java (NetBeans) untuk pelaporan internal.</li>
+          </ul>
+        </div>
+      </div>
+      <div class="timeline-item reveal" style="animation-delay:0.3s">
+        <div class="timeline-dot">🎓</div>
+        <div class="glass-card timeline-content">
+          <div class="exp-role">S1 Teknik Informatika</div>
+          <div class="exp-company">Universitas Indraprasta PGRI</div>
+          <div class="exp-period">2012 – 2016</div>
+          <ul class="exp-list">
+            <li>Asisten Lab & Asisten Dosen, aktif di proyek kampus dan freelance.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SERVICES -->
+<section id="services">
+  <div class="services-wrap">
+    <div class="reveal">
+      <div class="section-tag">Layanan</div>
+      <h2 class="section-title">Apa yang Saya Tawarkan</h2>
+      <p class="section-sub">Layanan pengembangan aplikasi Web, Mobile, dan integrasi sistem bisnis.</p>
+    </div>
+    <div class="services-grid">
+      <div class="glass-card service-card reveal"><div class="svc-icon">🌐</div><div class="svc-title">Web App Development</div><div class="svc-desc">Pengembangan aplikasi web modern berbasis Laravel, CodeIgniter, dan PHP untuk kebutuhan bisnis.</div></div>
+      <div class="glass-card service-card reveal"><div class="svc-icon">📱</div><div class="svc-title">Mobile App Development</div><div class="svc-desc">Pembuatan aplikasi Android menggunakan Java, Kotlin, dan Flutter untuk digitalisasi proses bisnis.</div></div>
+      <div class="glass-card service-card reveal"><div class="svc-icon">🔌</div><div class="svc-title">API & System Integration</div><div class="svc-desc">Integrasi API dan sistem untuk otomatisasi data, mempercepat transaksi dan meningkatkan efisiensi.</div></div>
+      <div class="glass-card service-card reveal"><div class="svc-icon">🗄️</div><div class="svc-title">Database Design</div><div class="svc-desc">Desain, optimasi, dan maintenance database MySQL/PostgreSQL untuk performa aplikasi yang handal.</div></div>
+      <div class="glass-card service-card reveal"><div class="svc-icon">🛠️</div><div class="svc-title">IT Support</div><div class="svc-desc">Troubleshooting hardware/software, instalasi perangkat, dan konfigurasi jaringan perusahaan.</div></div>
+      <div class="glass-card service-card reveal"><div class="svc-icon">🚀</div><div class="svc-title">Version Control & Deploy</div><div class="svc-desc">Implementasi Git untuk versioning, kolaborasi tim, serta deployment aplikasi yang efisien.</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact">
+  <div class="contact-wrap">
+    <div class="reveal">
+      <div class="section-tag">Kontak</div>
+      <h2 class="section-title">Hubungi Saya</h2>
+      <p class="section-sub">Hubungi saya untuk konsultasi atau kerja sama proyek.</p>
+    </div>
+    <div class="contact-grid">
+      <div class="glass-card contact-info-card reveal-left">
+        <div class="contact-item"><div class="ci-icon">📍</div><div><div class="ci-label">Lokasi</div><div class="ci-val">Cileungsi, Bogor - Jawa Barat</div></div></div>
+        <div class="contact-item"><div class="ci-icon">📧</div><div><div class="ci-label">Email</div><div class="ci-val">firlli.dev@gmail.com</div></div></div>
+        <div class="contact-item"><div class="ci-icon">📱</div><div><div class="ci-label">WhatsApp</div><div class="ci-val">0822-4949-5858</div></div></div>
+        <div class="social-row">
+          <a href="https://github.com/firlli123" target="_blank" class="social-btn" title="GitHub">⌨️</a>
+          <a href="https://www.linkedin.com/in/firlli-512469210/" target="_blank" class="social-btn" title="LinkedIn">💼</a>
+          <a href="https://instagram.com/firlli.dev" target="_blank" class="social-btn" title="Instagram">📸</a>
+          <a href="https://wa.me/6282249495858" target="_blank" class="social-btn" title="WhatsApp">💬</a>
+        </div>
+      </div>
+      <div class="glass-card cta-glass reveal-right">
+        <div style="font-size:56px;margin-bottom:16px">🤝</div>
+        <div class="cta-title">Mari Berkolaborasi!</div>
+        <div class="cta-sub">Punya proyek yang ingin dikerjakan bersama? Saya siap membantu digitalisasi bisnis kamu dengan solusi aplikasi yang handal dan efisien.</div>
+        <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap">
+          <a href="https://wa.me/6282249495858" target="_blank" class="btn-primary">💬 Chat di WhatsApp</a>
+          <a href="mailto:firlli.dev@gmail.com" class="btn-glass">📧 Kirim Email</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <p>© 2025 <span>FIRLLI</span> — IT Developer · Full Stack Developer · Crafted with 💚</p>
+</footer>
+
+<script>
+// PARTICLES
+(function(){
+  const container=document.getElementById('particles');
+  for(let i=0;i<35;i++){
+    const p=document.createElement('div');
+    p.className='particle';
+    const left=Math.random()*100;
+    const dur=8+Math.random()*12;
+    const delay=Math.random()*-20;
+    const drift=(Math.random()*160-80)+'px';
+    p.style.cssText=`left:${left}%;animation-duration:${dur}s;animation-delay:${delay}s;--drift:${drift}`;
+    container.appendChild(p);
+  }
+})();
+
+// TYPED TEXT
+(function(){
+  const words=['Web Developer','Mobile Developer','API Integrator','IT Support','Full Stack Developer'];
+  const el=document.getElementById('typed-text');
+  let wi=0,ci=0,deleting=false;
+  function type(){
+    const word=words[wi];
+    if(!deleting){
+      el.textContent=word.slice(0,ci+1);
+      ci++;
+      if(ci===word.length){setTimeout(()=>{deleting=true;setTimeout(type,80)},1600);return}
+    }else{
+      el.textContent=word.slice(0,ci-1);
+      ci--;
+      if(ci===0){deleting=false;wi=(wi+1)%words.length}
+    }
+    setTimeout(type,deleting?60:90);
+  }
+  type();
+})();
+
+// 3D CHARACTER ON CANVAS
+(function(){
+  const canvas=document.getElementById('charCanvas');
+  const ctx=canvas.getContext('2d');
+  let t=0,mouseX=210,mouseY=230;
+  canvas.addEventListener('mousemove',e=>{
+    const r=canvas.getBoundingClientRect();
+    mouseX=e.clientX-r.left;
+    mouseY=e.clientY-r.top;
+  });
+
+  function drawCharacter(t,mx,my){
+    ctx.clearRect(0,0,420,460);
+    const cx=210,cy=200;
+    const lean=(mx-210)/300*8;
+    const bob=Math.sin(t*0.04)*6;
+    const armSwing=Math.sin(t*0.04)*12;
+    const eyeLookX=(mx-210)/300*4;
+
+    // SHADOW
+    ctx.save();
+    ctx.globalAlpha=0.15;
+    ctx.fillStyle='#00cc66';
+    ctx.beginPath();
+    ctx.ellipse(cx,400+bob*0.3,70,18,0,0,Math.PI*2);
+    ctx.fill();
+    ctx.restore();
+
+    // LEGS
+    ctx.save();
+    ctx.translate(cx+lean,cy+bob);
+    // Left leg
+    ctx.fillStyle='#1a6b3c';
+    ctx.beginPath();
+    ctx.roundRect(cx-28-cx,-50,22,80,8);
+    ctx.fill();
+    // Right leg
+    ctx.fillStyle='#1a6b3c';
+    ctx.beginPath();
+    ctx.roundRect(cx+8-cx,-50,22,80,8);
+    ctx.fill();
+    // Shoes
+    ctx.fillStyle='#0a2e1a';
+    ctx.beginPath();ctx.roundRect(cx-34-cx,26,28,14,5);ctx.fill();
+    ctx.beginPath();ctx.roundRect(cx+6-cx,26,28,14,5);ctx.fill();
+    ctx.restore();
+
+    // TORSO (HOODIE)
+    ctx.save();
+    ctx.translate(cx+lean,cy+bob);
+    const bodyGrad=ctx.createLinearGradient(-40,-160,40,-40);
+    bodyGrad.addColorStop(0,'#2d8a55');
+    bodyGrad.addColorStop(0.5,'#1f6b3d');
+    bodyGrad.addColorStop(1,'#155230');
+    ctx.fillStyle=bodyGrad;
+    ctx.beginPath();
+    ctx.roundRect(-38,-150,76,110,10);
+    ctx.fill();
+    // Hoodie pocket
+    ctx.fillStyle='rgba(0,0,0,0.15)';
+    ctx.beginPath();ctx.roundRect(-18,-80,36,28,6);ctx.fill();
+    // Hoodie strings
+    ctx.strokeStyle='rgba(0,255,136,0.3)';ctx.lineWidth=2;
+    ctx.beginPath();ctx.moveTo(-6,-140);ctx.lineTo(-10,-115);ctx.stroke();
+    ctx.beginPath();ctx.moveTo(6,-140);ctx.lineTo(10,-115);ctx.stroke();
+    ctx.restore();
+
+    // LEFT ARM + HAND
+    ctx.save();
+    ctx.translate(cx-38+lean,cy-120+bob);
+    ctx.rotate((-0.4-armSwing*0.02)*Math.PI/6);
+    ctx.fillStyle='#2d8a55';
+    ctx.beginPath();ctx.roundRect(-10,0,20,65,8);ctx.fill();
+    // Hand (holding laptop)
+    ctx.fillStyle='#f5c89a';
+    ctx.beginPath();ctx.ellipse(0,68,12,10,0,0,Math.PI*2);ctx.fill();
+    ctx.restore();
+
+    // RIGHT ARM + HAND
+    ctx.save();
+    ctx.translate(cx+38+lean,cy-120+bob);
+    ctx.rotate((0.3+armSwing*0.02)*Math.PI/6);
+    ctx.fillStyle='#2d8a55';
+    ctx.beginPath();ctx.roundRect(-10,0,20,65,8);ctx.fill();
+    ctx.fillStyle='#f5c89a';
+    ctx.beginPath();ctx.ellipse(0,68,12,10,0,0,Math.PI*2);ctx.fill();
+    ctx.restore();
+
+    // LAPTOP
+    ctx.save();
+    ctx.translate(cx+lean,cy-55+bob);
+    ctx.rotate(lean*0.01);
+    // Base
+    const lapGrad=ctx.createLinearGradient(-45,0,45,20);
+    lapGrad.addColorStop(0,'#c8f5e0');lapGrad.addColorStop(1,'#9de8c0');
+    ctx.fillStyle=lapGrad;
+    ctx.beginPath();ctx.roundRect(-45,0,90,14,4);ctx.fill();
+    // Screen
+    const scrGrad=ctx.createLinearGradient(-38,-50,38,0);
+    scrGrad.addColorStop(0,'#1a3a2a');scrGrad.addColorStop(1,'#0d2018');
+    ctx.fillStyle=scrGrad;
+    ctx.beginPath();ctx.roundRect(-38,-50,76,52,5);ctx.fill();
+    // Screen glow
+    ctx.fillStyle='rgba(0,255,136,0.08)';
+    ctx.beginPath();ctx.roundRect(-35,-47,70,46,4);ctx.fill();
+    // Code lines on screen
+    const colors=['#00ff88','#00cc66','rgba(0,255,136,0.4)','#00ffaa','rgba(0,204,102,0.5)'];
+    for(let i=0;i<5;i++){
+      const w=15+Math.random()*40;
+      ctx.fillStyle=colors[i];
+      ctx.beginPath();ctx.roundRect(-28,i*8-38,w,3,2);ctx.fill();
+    }
+    // Cursor blink
+    if(Math.floor(t/20)%2===0){
+      ctx.fillStyle='#00ff88';
+      ctx.beginPath();ctx.roundRect(-28+30,-38+Math.floor(t/20)%5*8,2,8,1);ctx.fill();
+    }
+    // Apple-style logo
+    ctx.fillStyle='rgba(0,255,136,0.3)';
+    ctx.beginPath();ctx.arc(0,-25,6,0,Math.PI*2);ctx.fill();
+    ctx.restore();
+
+    // NECK
+    ctx.save();
+    ctx.translate(cx+lean,cy+bob);
+    ctx.fillStyle='#f5c89a';
+    ctx.beginPath();ctx.roundRect(-10,-170,20,24,5);ctx.fill();
+    ctx.restore();
+
+    // HEAD
+    ctx.save();
+    ctx.translate(cx+lean,cy+bob);
+    const headX=eyeLookX*0.5;
+    // Head shadow
+    ctx.fillStyle='rgba(0,0,0,0.06)';
+    ctx.beginPath();ctx.ellipse(headX+2,0-168,34,42,0,0,Math.PI*2);ctx.fill();
+    // Head
+    const headGrad=ctx.createRadialGradient(headX-8,-180,5,headX,-170,38);
+    headGrad.addColorStop(0,'#fde3b8');headGrad.addColorStop(1,'#f5c89a');
+    ctx.fillStyle=headGrad;
+    ctx.beginPath();ctx.ellipse(headX,-170,34,42,0,0,Math.PI*2);ctx.fill();
+
+    // HOODIE HOOD (behind head)
+    ctx.fillStyle='#1f6b3d';
+    ctx.beginPath();
+    ctx.ellipse(headX,-162,38,30,0,Math.PI,Math.PI*2);
+    ctx.fill();
+
+    // HAIR
+    ctx.fillStyle='#2c1a0e';
+    ctx.beginPath();
+    ctx.ellipse(headX,-200,30,18,0,Math.PI,Math.PI*2);
+    ctx.fill();
+    ctx.beginPath();
+    ctx.ellipse(headX-28,-185,12,8,0.5,0,Math.PI*2);
+    ctx.fill();
+    ctx.beginPath();
+    ctx.ellipse(headX+28,-185,12,8,-0.5,0,Math.PI*2);
+    ctx.fill();
+
+    // EYES
+    const ex=eyeLookX;
+    // Eye whites
+    ctx.fillStyle='white';
+    ctx.beginPath();ctx.ellipse(headX-12+ex,-170,9,7,0,0,Math.PI*2);ctx.fill();
+    ctx.beginPath();ctx.ellipse(headX+12+ex,-170,9,7,0,0,Math.PI*2);ctx.fill();
+    // Pupils
+    ctx.fillStyle='#1a0a00';
+    ctx.beginPath();ctx.ellipse(headX-11+ex,-170,5,5.5,0,0,Math.PI*2);ctx.fill();
+    ctx.beginPath();ctx.ellipse(headX+13+ex,-170,5,5.5,0,0,Math.PI*2);ctx.fill();
+    // Eye shine
+    ctx.fillStyle='white';
+    ctx.beginPath();ctx.ellipse(headX-9+ex,-168,2,2,0,0,Math.PI*2);ctx.fill();
+    ctx.beginPath();ctx.ellipse(headX+15+ex,-168,2,2,0,0,Math.PI*2);ctx.fill();
+    // Eyebrows
+    ctx.strokeStyle='#2c1a0e';ctx.lineWidth=2.5;ctx.lineCap='round';
+    ctx.beginPath();ctx.moveTo(headX-21+ex,-180);ctx.quadraticCurveTo(headX-12+ex,-184,headX-3+ex,-180);ctx.stroke();
+    ctx.beginPath();ctx.moveTo(headX+3+ex,-180);ctx.quadraticCurveTo(headX+12+ex,-184,headX+21+ex,-180);ctx.stroke();
+    // SMILE
+    ctx.strokeStyle='#c0703a';ctx.lineWidth=2;
+    ctx.beginPath();ctx.arc(headX,-166,8,0.2,Math.PI-0.2);ctx.stroke();
+
+    // GLASSES
+    ctx.strokeStyle='rgba(0,255,136,0.6)';ctx.lineWidth=1.5;
+    ctx.beginPath();ctx.roundRect(headX-21+ex,-177,18,14,4);ctx.stroke();
+    ctx.beginPath();ctx.roundRect(headX+3+ex,-177,18,14,4);ctx.stroke();
+    ctx.beginPath();ctx.moveTo(headX-3+ex,-170);ctx.lineTo(headX+3+ex,-170);ctx.stroke();
+    ctx.beginPath();ctx.moveTo(headX-21+ex,-170);ctx.lineTo(headX-26+ex,-167);ctx.stroke();
+    ctx.beginPath();ctx.moveTo(headX+21+ex,-170);ctx.lineTo(headX+26+ex,-167);ctx.stroke();
+
+    ctx.restore();
+
+    // FLOATING CODE PARTICLES
+    for(let i=0;i<6;i++){
+      const angle=t*0.025+i*(Math.PI*2/6);
+      const r=90+Math.sin(t*0.03+i)*20;
+      const px=cx+Math.cos(angle)*r+lean;
+      const py=cy-130+Math.sin(angle)*r*0.5+bob;
+      ctx.save();
+      ctx.globalAlpha=0.2+0.2*Math.sin(t*0.04+i);
+      ctx.fillStyle='#00cc66';
+      ctx.font='bold 10px JetBrains Mono,monospace';
+      const snippets=['</>','{}','//','()','&&','=>'];
+      ctx.fillText(snippets[i],px,py);
+      ctx.restore();
+    }
+
+    // NEON GLOW AURA
+    ctx.save();
+    ctx.globalAlpha=0.06+0.03*Math.sin(t*0.05);
+    const aura=ctx.createRadialGradient(cx+lean,cy-100+bob,20,cx+lean,cy-100+bob,120);
+    aura.addColorStop(0,'rgba(0,255,136,0.6)');
+    aura.addColorStop(1,'transparent');
+    ctx.fillStyle=aura;
+    ctx.beginPath();ctx.ellipse(cx+lean,cy-100+bob,120,140,0,0,Math.PI*2);ctx.fill();
+    ctx.restore();
+  }
+
+  function animate(){
+    t++;
+    drawCharacter(t,mouseX,mouseY);
+    requestAnimationFrame(animate);
+  }
+  animate();
+})();
+
+// PORTFOLIO FILTER
+(function(){
+  const btns=document.querySelectorAll('.filter-btn');
+  const cards=document.querySelectorAll('.portfolio-card');
+  btns.forEach(btn=>{
+    btn.addEventListener('click',()=>{
+      btns.forEach(b=>b.classList.remove('active'));
+      btn.classList.add('active');
+      const f=btn.dataset.filter;
+      cards.forEach(card=>{
+        if(f==='all'||card.dataset.cat===f){
+          card.style.display='block';
+          card.style.animation='none';
+          card.offsetHeight;
+          card.style.animation='';
+        }else{
+          card.style.display='none';
+        }
+      });
+    });
+  });
+})();
+
+// SCROLL REVEAL
+(function(){
+  const reveals=document.querySelectorAll('.reveal,.reveal-left,.reveal-right');
+  const io=new IntersectionObserver((entries)=>{
+    entries.forEach(entry=>{
+      if(entry.isIntersecting){
+        entry.target.classList.add('visible');
+        // Animate skill bars when visible
+        entry.target.querySelectorAll('.skill-fill').forEach(bar=>{
+          bar.style.width=bar.dataset.width+'%';
+        });
+      }
+    });
+  },{threshold:0.1,rootMargin:'0px 0px -50px 0px'});
+  reveals.forEach(el=>io.observe(el));
+})();
+
+// SMOOTH NAV SCROLL
+document.querySelectorAll('nav a').forEach(a=>{
+  a.addEventListener('click',e=>{
+    e.preventDefault();
+    const id=a.getAttribute('href');
+    document.querySelector(id)?.scrollIntoView({behavior:'smooth',block:'start'});
+  });
+});
+
+// RE-RANDOMIZE FLOATING CODE PARTICLES each render (seed)
+Math.random=function(){return(Math.sin(Date.now()*0.001)*43758.5453)%1};
+</script>
+</body>
+</html>

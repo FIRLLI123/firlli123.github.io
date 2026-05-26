@@ -1,0 +1,230 @@
+/* Simplified cursor and section highlight effect */
+
+#aurora-cursor {
+  position: fixed;
+  top: 0;
+  left: 0;
+  pointer-events: none;
+  z-index: 9999;
+  opacity: 0;
+  transition: opacity 0.25s ease;
+  will-change: transform;
+  mix-blend-mode: screen;
+}
+
+#aurora-cursor.is-active {
+  opacity: 1;
+}
+
+#aurora-cursor-dot {
+  position: absolute;
+  width: 7px;
+  height: 7px;
+  background: #ffffff;
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  box-shadow:
+    0 0 6px rgba(108, 99, 255, 0.9),
+    0 0 14px rgba(0, 195, 255, 0.55);
+}
+
+#aurora-cursor::before {
+  content: '';
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  transform: translate(-50%, -50%) scale(0.7);
+  background:
+    radial-gradient(circle, rgba(0, 195, 255, 0.30) 0%, rgba(108, 99, 255, 0.16) 42%, rgba(108, 99, 255, 0) 72%);
+  opacity: 0;
+  filter: blur(7px);
+  transition:
+    opacity 0.22s ease,
+    transform 0.22s ease,
+    filter 0.22s ease;
+}
+
+#aurora-cursor-ring {
+  position: absolute;
+  width: 36px;
+  height: 36px;
+  border: 1.5px solid rgba(108, 99, 255, 0.7);
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  transition:
+    width 0.25s cubic-bezier(0.22, 1, 0.36, 1),
+    height 0.25s cubic-bezier(0.22, 1, 0.36, 1),
+    border-color 0.25s ease,
+    box-shadow 0.25s ease;
+  box-shadow:
+    0 0 8px rgba(108, 99, 255, 0.25),
+    inset 0 0 8px rgba(0, 195, 255, 0.08);
+}
+
+#aurora-cursor.hover-active #aurora-cursor-ring {
+  width: 54px;
+  height: 54px;
+  border-color: rgba(0, 195, 255, 0.85);
+  box-shadow:
+    0 0 16px rgba(0, 195, 255, 0.4),
+    inset 0 0 12px rgba(0, 195, 255, 0.12);
+}
+
+#aurora-cursor.hover-active::before {
+  opacity: 1;
+  transform: translate(-50%, -50%) scale(1.7);
+  filter: blur(12px);
+}
+
+#aurora-cursor.hover-active #aurora-cursor-dot {
+  box-shadow:
+    0 0 10px rgba(255, 255, 255, 0.95),
+    0 0 22px rgba(0, 195, 255, 0.72),
+    0 0 34px rgba(108, 99, 255, 0.42);
+}
+
+#fire-canvas {
+  display: none;
+}
+
+.main .section {
+  cursor: none;
+}
+
+.main .section h1,
+.main .section h2,
+.main .section .typed,
+.main .section .btn,
+.main .section .profile-image,
+.main .section .profile-background,
+.main .section .social-links a {
+  transition:
+    text-shadow 0.45s ease,
+    box-shadow 0.45s ease,
+    border-color 0.35s ease,
+    color 0.35s ease,
+    filter 0.45s ease,
+    transform 0.35s cubic-bezier(0.22, 1, 0.36, 1),
+    letter-spacing 0.45s ease,
+    opacity 0.35s ease;
+}
+
+.main .section.cursor-active h1 {
+  text-shadow:
+    0 0 24px rgba(108, 99, 255, 0.55),
+    0 0 55px rgba(0, 195, 255, 0.28);
+  letter-spacing: 0.04em;
+}
+
+.main .section.cursor-active h2,
+.main .section.cursor-active .typed {
+  text-shadow:
+    0 0 16px rgba(0, 195, 255, 0.35),
+    0 0 36px rgba(108, 99, 255, 0.15);
+}
+
+.main .section.cursor-active .btn-primary {
+  box-shadow:
+    0 0 14px rgba(108, 99, 255, 0.45),
+    0 0 28px rgba(0, 195, 255, 0.18),
+    inset 0 0 10px rgba(108, 99, 255, 0.08);
+}
+
+.main .section.cursor-active .btn-outline {
+  box-shadow:
+    0 0 12px rgba(0, 195, 255, 0.32),
+    0 0 24px rgba(108, 99, 255, 0.14);
+  border-color: rgba(0, 195, 255, 0.7);
+}
+
+.main .section.cursor-active .profile-image {
+  filter:
+    drop-shadow(0 0 20px rgba(108, 99, 255, 0.4))
+    drop-shadow(0 0 40px rgba(0, 195, 255, 0.18));
+}
+
+.main .section.cursor-active .profile-background {
+  opacity: 1;
+  transform: scale(1.05) rotate(4deg);
+}
+
+.main .section.cursor-active .social-links a:hover {
+  text-shadow:
+    0 0 10px rgba(0, 195, 255, 0.8),
+    0 0 22px rgba(108, 99, 255, 0.45);
+  transform: translateY(-3px) scale(1.12);
+  color: #00c3ff;
+}
+
+.main .section.cursor-active .bg-circle {
+  animation: aurora-pulse 3s ease-in-out infinite alternate;
+}
+
+.main .section.cursor-active .profile-card,
+.main .section.cursor-active .skills-category,
+.main .section.cursor-active .skill-item,
+.main .section.cursor-active .service-card,
+.main .section.cursor-active .portfolio-wrap,
+.main .section.cursor-active .info-box,
+.main .section.cursor-active .map-box,
+.main .section.cursor-active .stat-item,
+.main .section.cursor-active .detail-item,
+.main .section.cursor-active .contact-item {
+  transition:
+    box-shadow 0.35s ease,
+    border-color 0.35s ease,
+    transform 0.35s cubic-bezier(0.22, 1, 0.36, 1),
+    background-color 0.35s ease;
+}
+
+.main .section.cursor-active .profile-card:hover,
+.main .section.cursor-active .skills-category:hover,
+.main .section.cursor-active .skill-item:hover,
+.main .section.cursor-active .service-card:hover,
+.main .section.cursor-active .portfolio-wrap:hover,
+.main .section.cursor-active .info-box:hover,
+.main .section.cursor-active .map-box:hover,
+.main .section.cursor-active .stat-item:hover,
+.main .section.cursor-active .detail-item:hover,
+.main .section.cursor-active .contact-item:hover {
+  box-shadow:
+    0 0 0 1px rgba(0, 195, 255, 0.18),
+    0 12px 40px rgba(5, 10, 30, 0.35),
+    0 0 24px rgba(108, 99, 255, 0.16),
+    0 0 42px rgba(0, 195, 255, 0.14);
+}
+
+.main .section.cursor-active .section-title:hover h2,
+.main .section.cursor-active .section-header:hover h2,
+.main .section.cursor-active .service-heading:hover,
+.main .section.cursor-active .resume-title:hover,
+.main .section.cursor-active .portfolio-info:hover h4 {
+  text-shadow:
+    0 0 20px rgba(0, 195, 255, 0.30),
+    0 0 40px rgba(108, 99, 255, 0.18);
+}
+
+@keyframes aurora-pulse {
+  from {
+    opacity: 0.35;
+    transform: scale(1);
+  }
+
+  to {
+    opacity: 0.65;
+    transform: scale(1.08);
+  }
+}
+
+@media (hover: none), (pointer: coarse) {
+  #aurora-cursor {
+    display: none;
+  }
+
+  .main .section {
+    cursor: auto;
+  }
+}
