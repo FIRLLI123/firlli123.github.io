@@ -168,19 +168,28 @@ const glow      = document.getElementById("glow");
 const cursor    = document.getElementById("cursor");
 let mouseX=0, mouseY=0, curX=0, curY=0;
 
+// Detect touch/mobile device
+const isTouchDevice = ('ontouchstart' in window) || (navigator.maxTouchPoints > 0);
+
 function animateCursor(){
-  curX += (mouseX-curX)*.1;
-  curY += (mouseY-curY)*.1;
-  robotImg.style.webkitMaskPosition = `${curX-140}px ${curY-140}px`;
-  robotImg.style.maskPosition       = `${curX-140}px ${curY-140}px`;
-  glow.style.left = `${curX}px`;
-  glow.style.top  = `${curY}px`;
-  cursor.style.left = `${curX}px`;
-  cursor.style.top  = `${curY}px`;
+  const dx = mouseX - curX;
+  const dy = mouseY - curY;
+  curX += dx * .1;
+  curY += dy * .1;
+  // Only update styles when there is actual movement (skip idle frames)
+  if(Math.abs(dx) > 0.05 || Math.abs(dy) > 0.05){
+    robotImg.style.webkitMaskPosition = `${curX-140}px ${curY-140}px`;
+    robotImg.style.maskPosition       = `${curX-140}px ${curY-140}px`;
+    glow.style.left = `${curX}px`;
+    glow.style.top  = `${curY}px`;
+    cursor.style.left = `${curX}px`;
+    cursor.style.top  = `${curY}px`;
+  }
   requestAnimationFrame(animateCursor);
 }
 animateCursor();
 
+// Desktop: mouse events (unchanged)
 container.addEventListener("mousemove",(e)=>{
   const r = container.getBoundingClientRect();
   mouseX = e.clientX-r.left; mouseY = e.clientY-r.top;
@@ -193,6 +202,30 @@ container.addEventListener("mouseleave",()=>{
   robotImg.style.maskSize       = "0px 0px";
   glow.style.opacity = 0;
 });
+
+// Mobile: touch events with passive:true (non-blocking, performant)
+if(isTouchDevice){
+  container.addEventListener("touchstart",(e)=>{
+    const r = container.getBoundingClientRect();
+    const t = e.touches[0];
+    mouseX = t.clientX - r.left;
+    mouseY = t.clientY - r.top;
+    robotImg.style.webkitMaskSize = "280px 280px";
+    robotImg.style.maskSize       = "280px 280px";
+    glow.style.opacity = 1;
+  },{ passive:true });
+  container.addEventListener("touchmove",(e)=>{
+    const r = container.getBoundingClientRect();
+    const t = e.touches[0];
+    mouseX = t.clientX - r.left;
+    mouseY = t.clientY - r.top;
+  },{ passive:true });
+  container.addEventListener("touchend",()=>{
+    robotImg.style.webkitMaskSize = "0px 0px";
+    robotImg.style.maskSize       = "0px 0px";
+    glow.style.opacity = 0;
+  },{ passive:true });
+}
 
 /* =============================================
    PAGE TRANSITION (portfolio button)

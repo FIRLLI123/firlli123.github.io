@@ -447,17 +447,20 @@ body.anime-mode .anime-divider{ display:block; }
   mask-size:0px 0px;-webkit-mask-size:0px 0px;
   mask-position:center;-webkit-mask-position:center;
   filter:saturate(1.15) contrast(1.1) drop-shadow(0 0 25px rgba(var(--accent-rgb),.3));
+  will-change:mask-size,mask-position,-webkit-mask-size,-webkit-mask-position;
 }
 .glow{
   position:absolute;width:320px;height:320px;border-radius:50%;
   background:radial-gradient(circle, var(--glow-color), transparent 70%);
   filter:blur(40px);pointer-events:none;transform:translate(-50%,-50%);
   opacity:0;transition:background .6s ease;
+  will-change:left,top,opacity;
 }
 .cursor{
   position:absolute;width:24px;height:24px;border-radius:50%;
   border:1px solid var(--cursor-border);transform:translate(-50%,-50%);
   pointer-events:none;z-index:10;transition:border-color .6s ease;
+  will-change:left,top;
 }
 body.anime-mode .cursor{
   border-radius:0;transform:translate(-50%,-50%) rotate(45deg);width:20px;height:20px;
