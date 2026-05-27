@@ -205,7 +205,8 @@ portfolioBtn.addEventListener("click",(e)=>{
   document.body.style.transition = "transform 1s ease, opacity 1s ease";
   document.body.style.transform  = "scale(1.03)";
   document.body.style.opacity    = "0.7";
-  setTimeout(()=>{ window.location.href="index4.html"; }, 1400);
+  sessionStorage.setItem('from-intro', '1');
+  setTimeout(()=>{ window.location.replace("index4.html"); }, 1400);
 });
 
 /* =============================================

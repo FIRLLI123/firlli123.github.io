@@ -40,6 +40,13 @@
   * Author: BootstrapMade.com
   * License: https://bootstrapmade.com/license/
   ======================================================== -->
+  <!-- Early guard: redirect to intro on direct access or refresh -->
+  <script>
+    if (!sessionStorage.getItem('from-intro')) {
+      window.location.replace('index.html');
+    }
+  </script>
+
 </head>
 
 <body class="index-page">
@@ -59,6 +66,7 @@
     <div class="header-container d-flex flex-column align-items-start">
       <nav id="navmenu" class="navmenu">
         <ul>
+          <li><a href="index.html"><i class="bi bi-stars navicon"></i> Intro</a></li>
           <li><a href="#hero" class="active"><i class="bi bi-house navicon"></i>Home</a></li>
           <li><a href="#about"><i class="bi bi-person navicon"></i> About</a></li>
           <li><a href="#resume"><i class="bi bi-file-earmark-text navicon"></i> Resume</a></li>
@@ -1068,6 +1076,15 @@ sistem produksi yang digunakan oleh puluhan pengguna operasional perusahaan.</p>
 
   <!-- Hero Fire Effect -->
   <script src="assets/js/fire-effect.js"></script>
+
+  <!-- Guard: clear flag & prevent back button -->
+  <script>
+    sessionStorage.removeItem('from-intro');
+    history.pushState(null, '', location.href);
+    window.addEventListener('popstate', function() {
+      history.pushState(null, '', location.href);
+    });
+  </script>
 
 </body>
 
