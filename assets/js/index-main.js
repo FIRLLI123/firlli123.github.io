@@ -33,15 +33,16 @@ function type(){
 type();
 
 /* =============================================
-   HEXAGON GRID BACKGROUND
+   MECHA BACKGROUND — HEX + NODE NETWORK + SCAN
 ============================================= */
 const hexCanvas = document.getElementById("hexCanvas");
 const hCtx = hexCanvas.getContext("2d");
 let hexes = [];
-const HEX_SIZE = 28;
+const HEX_SIZE = 30;
 const HEX_GAP  = 4;
 let hW, hH;
 
+/* ── hex grid ── */
 function hexPath(ctx, x, y, r){
   ctx.beginPath();
   for(let i=0;i<6;i++){
@@ -54,49 +55,206 @@ function hexPath(ctx, x, y, r){
 
 function buildHexes(){
   hexes = [];
-  const r = HEX_SIZE;
-  const w = r*2;
-  const h = Math.sqrt(3)*r;
+  const r = HEX_SIZE, w = r*2, h = Math.sqrt(3)*r;
   const cols = Math.ceil(hW/(w*.75))+2;
   const rows = Math.ceil(hH/h)+2;
-  for(let row=0; row<rows; row++){
-    for(let col=0; col<cols; col++){
-      const x = col*(w*.75);
-      const y = row*h + (col%2===0 ? 0 : h/2);
+  for(let row=0;row<rows;row++){
+    for(let col=0;col<cols;col++){
       hexes.push({
-        x, y,
+        x: col*(w*.75),
+        y: row*h + (col%2===0 ? 0 : h/2),
         phase: Math.random()*Math.PI*2,
-        speed: 0.3+Math.random()*0.4,
-        baseAlpha: 0.04+Math.random()*0.05
+        speed: 0.25+Math.random()*0.35,
+        baseAlpha: 0.03+Math.random()*0.035
       });
     }
   }
 }
 
+/* ── floating node network ── */
+let bgNodes = [];
+const BG_NODE_COUNT = 11;
+const BG_LINK_DIST  = 220;
+
+function buildNodes(){
+  bgNodes = [];
+  for(let i=0;i<BG_NODE_COUNT;i++){
+    bgNodes.push({
+      x: Math.random()*hW,
+      y: Math.random()*hH,
+      vx: (Math.random()-0.5)*0.28,
+      vy: (Math.random()-0.5)*0.28,
+      phase: Math.random()*Math.PI*2,
+      r: 1.8+Math.random()*1.8,
+      // data pulse along each outgoing link
+      pulse: Math.random()   // 0-1 travel position
+    });
+  }
+}
+
+/* ── circuit trace accents ── */
+let traces = [];
+function buildTraces(){
+  traces = [];
+  const count = 6;
+  for(let i=0;i<count;i++) spawnTrace();
+}
+function spawnTrace(){
+  // short L-shaped PCB segment at a random screen position
+  const x = Math.random()*hW;
+  const y = Math.random()*hH;
+  const len1 = 40+Math.random()*80;
+  const len2 = 30+Math.random()*60;
+  const dir  = Math.random()<0.5 ? 1 : -1;
+  traces.push({ x, y, len1, len2, dir, alpha:0, life:0,
+                maxLife: 180+Math.random()*240 });
+}
+
+/* ── scan sweep ── */
+let bgScanTime = 0;
+
 function resizeHex(){
   hW = hexCanvas.width  = window.innerWidth;
   hH = hexCanvas.height = window.innerHeight;
   buildHexes();
+  buildNodes();
+  buildTraces();
 }
 
 let hexTime = 0;
 function drawHexes(){
   hCtx.clearRect(0,0,hW,hH);
-  hexTime += 0.008;
+  hexTime += 0.007;
+
+  /* 1 ── hex grid ── */
   hexes.forEach(h=>{
     const pulse = (Math.sin(hexTime*h.speed + h.phase)+1)/2;
-    const alpha = h.baseAlpha + pulse*0.08;
+    const alpha = h.baseAlpha + pulse*0.13;
     hexPath(hCtx, h.x, h.y, HEX_SIZE-HEX_GAP);
-    hCtx.strokeStyle = `rgba(0,229,255,${alpha})`;
+    hCtx.strokeStyle = `rgba(0,220,255,${alpha})`;
     hCtx.lineWidth = 0.8;
     hCtx.stroke();
-    if(pulse > 0.85){
+    // bright hex flare — lower threshold so more hexes glow at once
+    if(pulse > 0.76){
       hexPath(hCtx, h.x, h.y, HEX_SIZE-HEX_GAP);
-      hCtx.strokeStyle = `rgba(0,229,255,${(pulse-0.85)*0.6})`;
-      hCtx.lineWidth = 1.5;
+      hCtx.strokeStyle = `rgba(0,229,255,${(pulse-0.76)*1.1})`;
+      hCtx.lineWidth = 1.8;
       hCtx.stroke();
     }
   });
+
+  /* 2 ── node network ── */
+  bgNodes.forEach(n=>{
+    n.x += n.vx; n.y += n.vy; n.phase += 0.018; n.pulse = (n.pulse+0.004)%1;
+    if(n.x<-30) n.x=hW+30; if(n.x>hW+30) n.x=-30;
+    if(n.y<-30) n.y=hH+30; if(n.y>hH+30) n.y=-30;
+  });
+
+  // connections
+  for(let i=0;i<bgNodes.length;i++){
+    for(let j=i+1;j<bgNodes.length;j++){
+      const a=bgNodes[i], b=bgNodes[j];
+      const dx=a.x-b.x, dy=a.y-b.y;
+      const dist=Math.sqrt(dx*dx+dy*dy);
+      if(dist<BG_LINK_DIST){
+        const t = 1-dist/BG_LINK_DIST;
+
+        // base connection line — clearly visible
+        hCtx.save();
+        hCtx.strokeStyle = `rgba(0,200,255,${t*0.35})`;
+        hCtx.lineWidth   = 0.9;
+        hCtx.beginPath();
+        hCtx.moveTo(a.x, a.y);
+        hCtx.lineTo(b.x, b.y);
+        hCtx.stroke();
+
+        // travelling data dot — bigger and brighter
+        const tp = a.pulse;
+        const px = a.x + (b.x-a.x)*tp;
+        const py = a.y + (b.y-a.y)*tp;
+        hCtx.beginPath();
+        hCtx.arc(px, py, 2.5, 0, Math.PI*2);
+        hCtx.fillStyle = `rgba(120,240,255,${t*0.9})`;
+        hCtx.fill();
+
+        hCtx.restore();
+      }
+    }
+  }
+
+  // node dots — larger glow, more visible
+  bgNodes.forEach(n=>{
+    const pulse = (Math.sin(n.phase)+1)/2;
+    hCtx.save();
+    // outer glow halo
+    const g = hCtx.createRadialGradient(n.x,n.y,0, n.x,n.y, n.r*9);
+    g.addColorStop(0,   `rgba(0,229,255,${0.50+pulse*0.35})`);
+    g.addColorStop(0.35,`rgba(0,200,255,${0.20+pulse*0.15})`);
+    g.addColorStop(0.7, `rgba(0,150,255,${0.06+pulse*0.04})`);
+    g.addColorStop(1,   'transparent');
+    hCtx.fillStyle = g;
+    hCtx.beginPath(); hCtx.arc(n.x,n.y,n.r*9,0,Math.PI*2); hCtx.fill();
+    // bright white-cyan core dot
+    hCtx.fillStyle = `rgba(200,245,255,1)`;
+    hCtx.beginPath(); hCtx.arc(n.x,n.y,n.r,0,Math.PI*2); hCtx.fill();
+    hCtx.restore();
+  });
+
+  /* 3 ── circuit trace accents ── */
+  traces.forEach((tr)=>{
+    tr.life++;
+    const half = tr.maxLife/2;
+    tr.alpha = tr.life < half
+      ? (tr.life/half)*0.65
+      : ((tr.maxLife-tr.life)/half)*0.65;
+
+    hCtx.save();
+    hCtx.strokeStyle = `rgba(0,229,255,${tr.alpha})`;
+    hCtx.lineWidth   = 1.2;
+    hCtx.shadowColor = 'rgba(0,229,255,0.9)';
+    hCtx.shadowBlur  = 8;
+    hCtx.beginPath();
+    hCtx.moveTo(tr.x, tr.y);
+    hCtx.lineTo(tr.x + tr.len1, tr.y);
+    hCtx.lineTo(tr.x + tr.len1, tr.y + tr.dir*tr.len2);
+    hCtx.stroke();
+    // glowing corner dot
+    hCtx.beginPath();
+    hCtx.arc(tr.x+tr.len1, tr.y, 3, 0, Math.PI*2);
+    hCtx.fillStyle = `rgba(180,240,255,${Math.min(tr.alpha*2.5, 1)})`;
+    hCtx.fill();
+    hCtx.restore();
+
+    if(tr.life >= tr.maxLife){
+      const x=Math.random()*hW, y=Math.random()*hH;
+      const len1=40+Math.random()*80, len2=30+Math.random()*60;
+      Object.assign(tr,{x,y,len1,len2,dir:Math.random()<0.5?1:-1,
+        alpha:0,life:0,maxLife:180+Math.random()*240});
+    }
+  });
+
+  /* 4 ── horizontal scan sweep ── */
+  bgScanTime += 0.006;
+  const scanY = ((bgScanTime*28) % (hH+120)) - 60;
+  hCtx.save();
+  // wide soft glow band
+  const sg = hCtx.createLinearGradient(0,scanY-50,0,scanY+50);
+  sg.addColorStop(0,    'transparent');
+  sg.addColorStop(0.35, 'rgba(0,229,255,0.06)');
+  sg.addColorStop(0.5,  'rgba(0,229,255,0.20)');
+  sg.addColorStop(0.65, 'rgba(0,229,255,0.06)');
+  sg.addColorStop(1,    'transparent');
+  hCtx.fillStyle = sg;
+  hCtx.fillRect(0, scanY-50, hW, 100);
+  // bright crisp line
+  hCtx.strokeStyle = 'rgba(0,229,255,0.55)';
+  hCtx.lineWidth   = 1;
+  hCtx.shadowColor = 'rgba(0,229,255,0.9)';
+  hCtx.shadowBlur  = 10;
+  hCtx.beginPath();
+  hCtx.moveTo(0,scanY); hCtx.lineTo(hW,scanY);
+  hCtx.stroke();
+  hCtx.restore();
 }
 
 /* =============================================
@@ -104,7 +262,9 @@ function drawHexes(){
 ============================================= */
 const arcCanvas = document.getElementById("frameArc");
 const aCtx = arcCanvas.getContext("2d");
-let arcAngle = 0;
+let arcAngle  = 0;
+let arcAngle2 = Math.PI * 0.85;   // dot 2 — starts at different phase
+let arcAngle3 = Math.PI * 1.55;   // dot 3 — starts at yet another phase
 let isAnimeMode = false;
 
 function resizeArc(){
@@ -120,28 +280,64 @@ function drawArc(){
   const cy = arcCanvas.height/2;
   const r  = Math.min(cx,cy) - 8;
 
-  arcAngle += 0.008;
+  // advance all three angles at intentionally irrational speeds
+  // so they never perfectly sync — gives a "random" feel
+  arcAngle  += 0.008;               // dot 1: slow CW
+  arcAngle2 -= 0.0137;              // dot 2: medium CCW
+  arcAngle3 += 0.0053;              // dot 3: slow CW, different speed
 
-  // outer slow arc
+  // outer slow arc (unchanged)
   aCtx.beginPath();
   aCtx.arc(cx, cy, r, arcAngle, arcAngle + Math.PI*0.4);
   aCtx.strokeStyle = "rgba(0,229,255,0.18)";
   aCtx.lineWidth = 1;
   aCtx.stroke();
 
-  // inner faster arc (opposite direction)
+  // inner faster arc opposite direction (unchanged)
   aCtx.beginPath();
   aCtx.arc(cx, cy, r-8, -arcAngle*1.5, -arcAngle*1.5 + Math.PI*0.25);
   aCtx.strokeStyle = "rgba(122,92,255,0.14)";
   aCtx.lineWidth = 0.8;
   aCtx.stroke();
 
-  // tiny bright dot at arc tip
-  const dotX = cx + r*Math.cos(arcAngle + Math.PI*0.4);
-  const dotY = cy + r*Math.sin(arcAngle + Math.PI*0.4);
+  /* ── Dot 1 (existing): outer ring, cyan ── */
+  const dot1X = cx + r*Math.cos(arcAngle + Math.PI*0.4);
+  const dot1Y = cy + r*Math.sin(arcAngle + Math.PI*0.4);
   aCtx.beginPath();
-  aCtx.arc(dotX, dotY, 2.5, 0, Math.PI*2);
+  aCtx.arc(dot1X, dot1Y, 2.5, 0, Math.PI*2);
   aCtx.fillStyle = "rgba(0,229,255,0.7)";
+  aCtx.fill();
+
+  /* ── Dot 2 (new): inner ring, counter-clockwise, purple ──
+     Radius has a subtle sinusoidal wobble for organic feel    */
+  const r2    = (r - 16) + 5 * Math.sin(arcAngle2 * 2.3);
+  const dot2X = cx + r2 * Math.cos(arcAngle2);
+  const dot2Y = cy + r2 * Math.sin(arcAngle2);
+  // tiny trailing glow
+  aCtx.beginPath();
+  aCtx.arc(dot2X, dot2Y, 5, 0, Math.PI*2);
+  aCtx.fillStyle = "rgba(122,92,255,0.10)";
+  aCtx.fill();
+  // core
+  aCtx.beginPath();
+  aCtx.arc(dot2X, dot2Y, 2, 0, Math.PI*2);
+  aCtx.fillStyle = "rgba(160,120,255,0.75)";
+  aCtx.fill();
+
+  /* ── Dot 3 (new): mid ring, clockwise, lighter cyan ──
+     Different elliptical feel: x-radius slightly larger       */
+  const r3    = (r - 26) + 4 * Math.cos(arcAngle3 * 1.7);
+  const dot3X = cx + r3 * 1.06 * Math.cos(arcAngle3);
+  const dot3Y = cy + r3 * 0.94 * Math.sin(arcAngle3);
+  // tiny trailing glow
+  aCtx.beginPath();
+  aCtx.arc(dot3X, dot3Y, 4, 0, Math.PI*2);
+  aCtx.fillStyle = "rgba(0,200,255,0.10)";
+  aCtx.fill();
+  // core
+  aCtx.beginPath();
+  aCtx.arc(dot3X, dot3Y, 1.8, 0, Math.PI*2);
+  aCtx.fillStyle = "rgba(100,230,255,0.65)";
   aCtx.fill();
 }
 
