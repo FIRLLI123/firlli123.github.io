@@ -340,10 +340,10 @@ function drawPatches(){
 
   if(!altImg.complete || altImg.naturalWidth === 0) return;
 
-  // 1 random centre, radius ≈ 1/3 of the shorter dimension
-  const baseR  = Math.min(W, H) / 3;
-  const radius = baseR * (0.88 + Math.random() * 0.28);
-  const pad    = radius * 0.3;
+  // 1 random centre, radius ≈ half of the shorter dimension
+  const baseR  = Math.min(W, H) / 1.8;
+  const radius = baseR * (0.88 + Math.random() * 0.22);
+  const pad    = radius * 0.15;
   const cx     = pad + Math.random() * (W - pad * 2);
   const cy     = pad + Math.random() * (H - pad * 2);
 
