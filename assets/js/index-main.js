@@ -275,6 +275,196 @@ const animeContent = {
 let isAnime = false;
 let transitioning = false;
 
+/* =============================================
+   ANIME PHOTO-SWAP EFFECT
+   Every ~2s in anime mode, mainImg flashes between
+   asli.png ↔ anime2.png with a lightning burst.
+   Pauses while the cursor is inside the frame.
+============================================= */
+let swapInterval = null;
+let swapHovered  = false;
+let swapShowingAlt = false;   // true = currently showing anime2.png
+
+// Overlay canvas for the lightning flash (sits above mainImg, below robot-layer)
+const flashCanvas = document.createElement("canvas");
+flashCanvas.id = "flashCanvas";
+flashCanvas.style.cssText = [
+  "position:absolute","inset:0","width:100%","height:100%",
+  "pointer-events:none","z-index:3","border-radius:30px",
+  "opacity:0","transition:opacity 0.06s ease"
+].join(";");
+// Insert before the glow div (keeps z-order: mainImg→flashCanvas→robot-layer→glow→cursor)
+container.insertBefore(flashCanvas, document.getElementById("glow"));
+
+function resizeFlash(){
+  flashCanvas.width  = container.offsetWidth;
+  flashCanvas.height = container.offsetHeight;
+}
+resizeFlash();
+window.addEventListener("resize", resizeFlash);
+
+function drawLightningFlash(){
+  resizeFlash();
+  const fc  = flashCanvas.getContext("2d");
+  const W   = flashCanvas.width;
+  const H   = flashCanvas.height;
+  fc.clearRect(0, 0, W, H);
+
+  // Pick a random effect style each time
+  const style = Math.floor(Math.random() * 4);
+
+  if(style === 0){
+    /* ── Style 0: vertical lightning bolt ── */
+    fc.save();
+    const x = W * (0.3 + Math.random() * 0.4);
+    let   y = 0;
+    fc.strokeStyle = "rgba(255,220,100,0.95)";
+    fc.lineWidth   = 2 + Math.random() * 2;
+    fc.shadowColor = "rgba(255,200,50,1)";
+    fc.shadowBlur  = 18;
+    fc.beginPath();
+    fc.moveTo(x, y);
+    while(y < H){
+      y += 30 + Math.random() * 50;
+      fc.lineTo(x + (Math.random() - 0.5) * 80, y);
+    }
+    fc.stroke();
+    // secondary thinner bolt
+    fc.strokeStyle = "rgba(255,255,255,0.7)";
+    fc.lineWidth   = 0.8;
+    fc.shadowBlur  = 6;
+    let y2 = 0;
+    const x2 = x + (Math.random() - 0.5) * 40;
+    fc.beginPath();
+    fc.moveTo(x2, y2);
+    while(y2 < H){
+      y2 += 20 + Math.random() * 40;
+      fc.lineTo(x2 + (Math.random() - 0.5) * 50, y2);
+    }
+    fc.stroke();
+    fc.restore();
+    // white flash overlay
+    const grad = fc.createLinearGradient(x-60, 0, x+60, 0);
+    grad.addColorStop(0,   "transparent");
+    grad.addColorStop(0.5, "rgba(255,255,255,0.18)");
+    grad.addColorStop(1,   "transparent");
+    fc.fillStyle = grad;
+    fc.fillRect(0, 0, W, H);
+
+  } else if(style === 1){
+    /* ── Style 1: horizontal glitch slices ── */
+    fc.save();
+    const slices = 5 + Math.floor(Math.random() * 6);
+    for(let i = 0; i < slices; i++){
+      const sy = Math.random() * H;
+      const sh = 2 + Math.random() * 12;
+      const sx = (Math.random() - 0.5) * 30;
+      const r  = Math.floor(Math.random() * 255);
+      const g  = Math.floor(Math.random() * 100);
+      const b  = Math.floor(180 + Math.random() * 75);
+      fc.fillStyle = `rgba(${r},${g},${b},0.35)`;
+      fc.fillRect(sx, sy, W, sh);
+    }
+    // Scanline sweep
+    const sweepGrad = fc.createLinearGradient(0, 0, 0, H);
+    sweepGrad.addColorStop(0,   "transparent");
+    sweepGrad.addColorStop(0.5, "rgba(192,132,252,0.12)");
+    sweepGrad.addColorStop(1,   "transparent");
+    fc.fillStyle = sweepGrad;
+    fc.fillRect(0, 0, W, H);
+    fc.restore();
+
+  } else if(style === 2){
+    /* ── Style 2: chromatic aberration burst ── */
+    fc.save();
+    // Red channel shift left
+    fc.fillStyle = "rgba(255,0,80,0.12)";
+    fc.fillRect(-8, 0, W, H);
+    // Blue channel shift right
+    fc.fillStyle = "rgba(0,180,255,0.10)";
+    fc.fillRect(8, 0, W, H);
+    // Centre white burst
+    const cx = W / 2, cy = H * 0.4;
+    const radGrad = fc.createRadialGradient(cx, cy, 0, cx, cy, W * 0.55);
+    radGrad.addColorStop(0,   "rgba(255,255,255,0.22)");
+    radGrad.addColorStop(0.4, "rgba(220,180,255,0.10)");
+    radGrad.addColorStop(1,   "transparent");
+    fc.fillStyle = radGrad;
+    fc.fillRect(0, 0, W, H);
+    fc.restore();
+
+  } else {
+    /* ── Style 3: dissolve pixel dust ── */
+    fc.save();
+    const particleCount = 120;
+    for(let i = 0; i < particleCount; i++){
+      const px = Math.random() * W;
+      const py = Math.random() * H;
+      const ps = 1 + Math.random() * 5;
+      const pa = 0.4 + Math.random() * 0.5;
+      const hue = 260 + Math.random() * 60;  // purple range
+      fc.fillStyle = `hsla(${hue},80%,75%,${pa})`;
+      fc.fillRect(px, py, ps, ps);
+    }
+    // Vertical light streak
+    const lx = Math.random() * W;
+    const lg = fc.createLinearGradient(lx - 20, 0, lx + 20, 0);
+    lg.addColorStop(0,   "transparent");
+    lg.addColorStop(0.5, "rgba(245,158,11,0.25)");
+    lg.addColorStop(1,   "transparent");
+    fc.fillStyle = lg;
+    fc.fillRect(0, 0, W, H);
+    fc.restore();
+  }
+}
+
+function triggerSwap(){
+  if(swapHovered) return;
+
+  // Step 1 — draw flash on canvas, make it visible
+  drawLightningFlash();
+  flashCanvas.style.transition = "opacity 0.04s ease";
+  flashCanvas.style.opacity    = "1";
+
+  // Step 2 — at peak of flash, swap the image
+  setTimeout(()=>{
+    swapShowingAlt = !swapShowingAlt;
+    mainImg.src = swapShowingAlt ? animeContent.robotSrc : animeContent.mainSrc;
+
+    // Step 3 — fade flash out
+    flashCanvas.style.transition = "opacity 0.18s ease";
+    flashCanvas.style.opacity    = "0";
+  }, 60);
+}
+
+function startSwapLoop(){
+  stopSwapLoop();
+  // Reset to base image each time we start
+  swapShowingAlt = false;
+  mainImg.src = animeContent.mainSrc;
+  swapInterval = setInterval(triggerSwap, 2200);
+}
+
+function stopSwapLoop(){
+  if(swapInterval){ clearInterval(swapInterval); swapInterval = null; }
+  // Reset flash overlay
+  flashCanvas.style.opacity = "0";
+}
+
+// Pause on hover — existing hover mask effect takes full control
+container.addEventListener("mouseenter", ()=>{ swapHovered = true; });
+container.addEventListener("mouseleave", ()=>{
+  swapHovered = false;
+  // Restore base image when cursor leaves (if alt is showing)
+  if(isAnime && swapShowingAlt){
+    swapShowingAlt = false;
+    mainImg.src = animeContent.mainSrc;
+  }
+});
+// Mobile touch
+container.addEventListener("touchstart", ()=>{ swapHovered = true; }, { passive: true });
+container.addEventListener("touchend",   ()=>{ swapHovered = false; }, { passive: true });
+
 if(localStorage.getItem("firlli-mode")==="anime") applyMode(true,false);
 
 modeToggle.addEventListener("click",()=>{
@@ -330,9 +520,17 @@ function applyMode(anime, animate){
   document.body.classList.toggle("anime-mode", anime);
 
   /* show/hide hex canvas & robot frame */
-  hexEl.style.display    = anime ? "none" : "block";
+  hexEl.style.display      = anime ? "none" : "block";
   robotFrame.style.display = anime ? "none" : "block";
   arcCanvas.style.display  = anime ? "none" : "block";
+
+  /* start/stop the anime photo-swap loop */
+  if(anime){
+    // Small delay so the mode transition finishes before first swap fires
+    setTimeout(startSwapLoop, 900);
+  } else {
+    stopSwapLoop();
+  }
 
   localStorage.setItem("firlli-mode", anime ? "anime" : "robot");
 }
