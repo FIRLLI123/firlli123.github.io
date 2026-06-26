@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <title>Portfolio Details - DASI Web Dashboard</title>
+  <meta name="description" content="">
+  <meta name="keywords" content="">
+
+  <!-- Favicons -->
+  <link href="assets/img/favicon.png" rel="icon">
+  <link href="assets/img/apple-touch-icon.png" rel="apple-touch-icon">
+
+  <!-- Fonts -->
+  <link href="https://fonts.googleapis.com" rel="preconnect">
+  <link href="https://fonts.gstatic.com" rel="preconnect" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&family=Ubuntu:ital,wght@0,300;0,400;0,500;0,700;1,300;1,400;1,500;1,700&family=Nunito:ital,wght@0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+
+  <!-- Vendor CSS Files -->
+  <link href="assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+  <link href="assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
+  <link href="assets/vendor/aos/aos.css" rel="stylesheet">
+  <link href="assets/vendor/glightbox/css/glightbox.min.css" rel="stylesheet">
+  <link href="assets/vendor/swiper/swiper-bundle.min.css" rel="stylesheet">
+
+  <!-- Main CSS File -->
+  <link href="assets/css/main.css" rel="stylesheet">
+</head>
+
+<body class="portfolio-details-page">
+
+  <header id="header" class="header dark-background d-flex flex-column justify-content-center">
+    <i class="header-toggle d-xl-none bi bi-list"></i>
+    <div class="header-container d-flex flex-column align-items-start">
+      <nav id="navmenu" class="navmenu">
+        <ul>
+          <li>
+            <a href="index4.html#portfolio">
+              <i class="bi bi-arrow-left navicon"></i>Kembali
+            </a>
+          </li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main class="main">
+
+    <!-- Page Title -->
+    <div class="page-title dark-background">
+      <div class="container d-lg-flex justify-content-between align-items-center">
+        <h1 class="mb-2 mb-lg-0">DASI Web Dashboard</h1>
+        <nav class="breadcrumbs">
+          <ol>
+            <li><a href="index4.html">Home</a></li>
+            <li class="current">Portfolio Details</li>
+          </ol>
+        </nav>
+      </div>
+    </div><!-- End Page Title -->
+
+    <!-- Portfolio Details Section -->
+    <section id="portfolio-details" class="portfolio-details section">
+
+      <div class="container" data-aos="fade-up" data-aos-delay="100">
+
+        <div class="row gy-4">
+
+          <div class="col-lg-8">
+            <div class="portfolio-details-slider swiper init-swiper">
+
+              <script type="application/json" class="swiper-config">
+                {
+                  "loop": true,
+                  "speed": 600,
+                  "autoplay": {
+                    "delay": 5000
+                  },
+                  "slidesPerView": "auto",
+                  "pagination": {
+                    "el": ".swiper-pagination",
+                    "type": "bullets",
+                    "clickable": true
+                  }
+                }
+              </script>
+
+              <div class="swiper-wrapper align-items-center">
+
+                <div class="swiper-slide">
+                  <img src="assets/img/portfolio/projek-gambar/DASI Web/login.jpeg" alt="Halaman Login DASI Web" class="img-fluid" loading="lazy">
+                </div>
+
+                <div class="swiper-slide">
+                  <img src="assets/img/portfolio/projek-gambar/DASI Web/dashboard-chat-ai.jpeg" alt="AI Chat Assistant DASI Web" class="img-fluid" loading="lazy">
+                </div>
+
+                <div class="swiper-slide">
+                  <img src="assets/img/portfolio/projek-gambar/DASI Web/info-stok.jpeg" alt="Informasi Stok Produk" class="img-fluid" loading="lazy">
+                </div>
+
+                <div class="swiper-slide">
+                  <img src="assets/img/portfolio/projek-gambar/DASI Web/list-stok-movement.jpeg" alt="Histori Pergerakan Stok" class="img-fluid" loading="lazy">
+                </div>
+
+                <div class="swiper-slide">
+                  <img src="assets/img/portfolio/projek-gambar/DASI Web/upload-pembayarab.jpeg" alt="Validasi Bukti Pembayaran" class="img-fluid" loading="lazy">
+                </div>
+
+              </div>
+              <div class="swiper-pagination"></div>
+            </div>
+          </div>
+
+          <div class="col-lg-4">
+            <div class="portfolio-info" data-aos="fade-left" data-aos-delay="200">
+              <h3>Project Information</h3>
+              <ul>
+                <li><strong>Category</strong>: Web Dashboard (Laravel)</li>
+                <li><strong>Client</strong>: Internal Project</li>
+                <li><strong>Project Date</strong>: 2025</li>
+                <li><strong>My Role</strong>: Full Stack Developer</li>
+                <li><strong>Project Status</strong>: <span class="badge bg-success">Completed</span></li>
+                <li><strong>Technology Stack</strong>: 
+                  <div class="mt-2">
+                    <span class="badge bg-secondary">Laravel</span>
+                    <span class="badge bg-secondary">Vue.js</span>
+                    <span class="badge bg-secondary">Tailwind CSS</span>
+                    <span class="badge bg-secondary">MySQL</span>
+                    <span class="badge bg-secondary">RESTful API</span>
+                  </div>
+                </li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="col-lg-12">
+            <div class="portfolio-description" data-aos="fade-up" data-aos-delay="300">
+              <h2>Project Overview</h2>
+              <p>
+                DASI Web Dashboard adalah platform backend berbasis Laravel yang dirancang untuk mengelola seluruh proses bisnis penjualan modem secara terpusat. Sistem ini mengintegrasikan manajemen stok, monitoring pergerakan barang (Stock Movement), proses retur, laporan penjualan, serta AI Assistant yang membantu pengguna memperoleh informasi bisnis dengan lebih cepat. Dashboard analitik yang interaktif memberikan visibilitas menyeluruh terhadap operasional perusahaan sehingga pengambilan keputusan dapat dilakukan secara real-time.
+              </p>
+
+              <div class="features mt-4">
+                <h3>Key Features</h3>
+                <div class="row gy-3">
+                  <div class="col-md-6">
+                    <div class="feature-item" data-aos="fade-up" data-aos-delay="400">
+                      <i class="bi bi-box-seam text-primary"></i>
+                      <h4>Inventory & Stock Management</h4>
+                      <p>Mengelola stok produk secara terpusat dengan monitoring ketersediaan barang, mutasi stok, dan histori pergerakan inventori secara lengkap.</p>
+                    </div>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="feature-item" data-aos="fade-up" data-aos-delay="500">
+                      <i class="bi bi-receipt-cutoff text-primary"></i>
+                      <h4>Sales & Return Management</h4>
+                      <p>Mendukung proses transaksi penjualan, retur barang, serta validasi data untuk memastikan setiap transaksi tercatat dengan akurat.</p>
+                    </div>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="feature-item" data-aos="fade-up" data-aos-delay="600">
+                      <i class="bi bi-chat-left-dots text-primary"></i>
+                      <h4>AI Business Assistant</h4>
+                      <p>Terintegrasi dengan AI Chat yang membantu pengguna mencari data, menjawab pertanyaan operasional, dan mempercepat analisis bisnis.</p>
+                    </div>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="feature-item" data-aos="fade-up" data-aos-delay="700">
+                      <i class="bi bi-graph-up-arrow text-primary"></i>
+                      <h4>Interactive Dashboard & Reports</h4>
+                      <p>Dashboard analitik dengan berbagai laporan penjualan, stok, dan performa bisnis yang diperbarui secara real-time.</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- New: Challenges & Solutions section -->
+              <div class="challenges-section mt-5" data-aos="fade-up" data-aos-delay="300">
+                <h3 class="border-bottom pb-2 mb-3"><i class="bi bi-lightning-charge-fill text-warning"></i> Challenges & Solutions</h3>
+                <div class="row gy-4">
+                  <div class="col-md-6">
+                    <div class="card h-100 bg-dark border-secondary p-3">
+                      <h5 class="text-danger"><i class="bi bi-exclamation-triangle"></i> Konsistensi Stok Multi-channel</h5>
+                      <p class="text-secondary small mt-2">
+                        <strong>Tantangan:</strong> Penjualan dilakukan serentak oleh sales lapangan via mobile app dan admin via web dashboard. Tanpa penanganan khusus, penambahan atau pengurangan stok bersamaan berisiko menimbulkan selisih data stok (race conditions).
+                      </p>
+                      <p class="text-light small mt-auto">
+                        <strong>Solusi:</strong> Menggunakan database transactions Laravel dengan tingkat isolasi serializable dan locking mechanism (SELECT FOR UPDATE) saat mutasi stok terjadi.
+                      </p>
+                    </div>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="card h-100 bg-dark border-secondary p-3">
+                      <h5 class="text-success"><i class="bi bi-lightbulb"></i> Asisten AI Interaktif</h5>
+                      <p class="text-secondary small mt-2">
+                        <strong>Tantangan:</strong> Pengguna non-teknis kesulitan untuk mengekstrak insight tren penjualan jika harus melihat tabel yang kompleks.
+                      </p>
+                      <p class="text-light small mt-auto">
+                        <strong>Solusi:</strong> Membangun integrasi AI chatbot yang terhubung langsung ke database via API terenkripsi. AI dibekali system prompt khusus untuk membaca query database ter-aggregasi dengan aman tanpa mengekspos data kredensial.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+
+    </section><!-- /Portfolio Details Section -->
+
+  </main>
+
+  <footer id="footer" class="footer position-relative">
+    <div class="container">
+      <div class="copyright text-center">
+        <p>© <span>Copyright</span> <strong class="px-1 sitename">firlli123.github.io</strong> <span>All Rights Reserved</span></p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Scroll Top -->
+  <a href="#" id="scroll-top" class="scroll-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
+
+  <!-- Preloader -->
+  <div id="preloader"></div>
+
+  <!-- Vendor JS Files -->
+  <script src="assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+  <script src="assets/vendor/php-email-form/validate.js"></script>
+  <script src="assets/vendor/aos/aos.js"></script>
+  <script src="assets/vendor/typed.js/typed.umd.js"></script>
+  <script src="assets/vendor/purecounter/purecounter_vanilla.js"></script>
+  <script src="assets/vendor/waypoints/noframework.waypoints.js"></script>
+  <script src="assets/vendor/isotope-layout/isotope.pkgd.min.js"></script>
+  <script src="assets/vendor/imagesloaded/imagesloaded.pkgd.min.js"></script>
+  <script src="assets/vendor/glightbox/js/glightbox.min.js"></script>
+  <script src="assets/vendor/swiper/swiper-bundle.min.js"></script>
+
+  <!-- Main JS File -->
+  <script src="assets/js/main.js"></script>
+
+</body>
+
+</html>

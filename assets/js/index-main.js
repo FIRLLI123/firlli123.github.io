@@ -4,13 +4,15 @@
 const robotTexts = [
   "Web Development",
   "Mobile Development",
-  "API Integration",
+  "API & AI Integration",
+  "n8n Workflow Automation",
   "IT Support & Troubleshooting"
 ];
 const animeTexts = [
   "Web Development",
   "Mobile Development",
-  "API Integration",
+  "API & AI Integration",
+  "n8n Workflow Automation",
   "IT Support & Troubleshooting"
 ];
 let currentTexts = robotTexts;
@@ -453,16 +455,16 @@ const hexEl       = document.getElementById("hexCanvas");
 
 const robotContent = {
   icon:"🤖", label:"ROBOT",
-  eyebrow:"Available for Web, Mobile, and System Integration",
-  role:"IT Developer | Full Stack Developer",
+  eyebrow:"Available for Web, Mobile, System Integration & AI Automation",
+  role:"IT Developer | AI & Automation Specialist",
   noteTitle:"Opening Page",
   noteBody:"Halaman ini adalah pembuka singkat. Untuk melihat detail proyek, pengalaman kerja, dan layanan yang saya kerjakan, lanjut masuk ke halaman portfolio utama.",
   mainSrc:"aslifix.png", robotSrc:"robotfix.png"
 };
 const animeContent = {
   icon:"🌸", label:"ANIME",
-  eyebrow:"神のコード ✦ Web · Mobile · System",
-  role:"IT 開発者 | Full Stack Developer",
+  eyebrow:"神のコード ✦ Web · Mobile · AI · Automation",
+  role:"IT 開発者 | AI & Automation Specialist",
   noteTitle:"序章　— PROLOGUE",
   noteBody:"Halaman ini adalah pembuka singkat. Untuk melihat detail proyek, pengalaman kerja, dan layanan yang saya kerjakan, lanjut masuk ke halaman portfolio utama.",
   mainSrc:"asli.png", robotSrc:"anime2.png"
